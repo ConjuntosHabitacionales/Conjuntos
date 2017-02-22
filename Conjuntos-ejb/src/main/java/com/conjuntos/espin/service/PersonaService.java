@@ -26,8 +26,8 @@ import org.mongodb.morphia.query.UpdateResults;
 @LocalBean
 public class PersonaService implements Serializable {
 
-    private final MongoPersistence conn = new MongoPersistence();
-    private final Datastore ds = conn.context();
+    private MongoPersistence conn = new MongoPersistence();
+    private Datastore ds = conn.context();
 
     public String insert(Persona persona) {
         persona.setCodPersona(new Integer(RandomStringUtils.randomNumeric(5)));

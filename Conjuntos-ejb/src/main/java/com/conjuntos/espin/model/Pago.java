@@ -24,6 +24,7 @@ public class Pago {
     private String mes;
     private Boolean estado;
     private Date creationDate;
+    private Date lastChange;
 
     public Pago() {
     }
@@ -92,6 +93,14 @@ public class Pago {
         this.creationDate = creationDate;
     }
 
+    public Date getLastChange() {
+        return lastChange;
+    }
+
+    public void setLastChange(Date lastChange) {
+        this.lastChange = lastChange;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -116,10 +125,4 @@ public class Pago {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "Pago{" + "index=" + index + ", tipo=" + tipo + ", valor=" + valor + ", asunto=" + asunto + ", forma=" + forma + ", mes=" + mes + ", estado=" + estado + ", creationDate=" + creationDate + '}';
-    }
-
 }

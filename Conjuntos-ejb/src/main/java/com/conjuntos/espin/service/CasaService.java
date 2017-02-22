@@ -23,10 +23,10 @@ import org.mongodb.morphia.query.UpdateResults;
  */
 @LocalBean
 @Stateless
-public class CasaService implements Serializable{
+public class CasaService implements Serializable {
 
-    private final MongoPersistence conn = new MongoPersistence();
-    private final Datastore ds = conn.context();
+    private MongoPersistence conn = new MongoPersistence();
+    private Datastore ds = conn.context();
 
     public String insert(Casa casa) {
         Casa axu = this.findByCodCasa(casa);

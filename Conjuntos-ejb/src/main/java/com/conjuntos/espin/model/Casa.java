@@ -16,10 +16,12 @@ import org.mongodb.morphia.annotations.Indexes;
  *
  * @author luis
  */
-@Entity(value="Casa", noClassnameStored = true)
-@Indexes({@Index(fields = @Field("codCasa"))})
-public class Casa extends BaseEntity{
-    
+@Entity(value = "Casa", noClassnameStored = true)
+@Indexes({
+    @Index(fields = @Field("codCasa")),
+    @Index(fields = @Field("numero"))})
+public class Casa extends BaseEntity {
+
     private Integer codCasa;
     private Integer numero;
     private String bloque;
@@ -94,7 +96,6 @@ public class Casa extends BaseEntity{
     @Override
     public String toString() {
         return "Casa{" + "codCasa=" + codCasa + ", Numero=" + numero + ", bloque=" + bloque + ", codeLuz=" + codeLuz + ", codeAgua=" + codeAgua + '}';
-    }    
+    }
 
 }
-

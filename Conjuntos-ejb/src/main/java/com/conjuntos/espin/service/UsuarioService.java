@@ -27,8 +27,8 @@ import org.mongodb.morphia.query.UpdateResults;
 @Stateless
 public class UsuarioService implements Serializable {
 
-    private final MongoPersistence conn = new MongoPersistence();
-    private final Datastore ds = conn.context();
+    private MongoPersistence conn = new MongoPersistence();
+    private Datastore ds = conn.context();
 
     public String insert(Usuario usuario) {
         usuario.setCodUsuario(new Integer(RandomStringUtils.randomNumeric(5)));
@@ -69,8 +69,12 @@ public class UsuarioService implements Serializable {
     }
 
     public Usuario findLogin(Usuario usuario) {
+        String username = usuario.getUsername().trim();
+        String password = usuario.getPassword().trim();
+        usuario.setUsername(username);
+        usuario.setPassword(password);
         Usuario find = this.findByUsername(usuario);
-        if (find != null) {
+        if (find.getId() != null && !usuario.getPassword().equals("")) {
             if (!find.getPassword().equals(
                     DigestUtils.md5Hex(usuario.getPassword()))) {
                 find = null;
