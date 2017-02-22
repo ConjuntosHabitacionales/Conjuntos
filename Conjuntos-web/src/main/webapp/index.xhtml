@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Iniciar</title>
+    </h:head>
+    <h:body>
+        <h:form id="flogin">
+            <p:panel header="Iniciar Sesion">
+                <h:panelGrid columns="3" cellpadding="">
+                    <p:outputLabel for="username" value="Username:"/>
+                    <p:inputText id="username" required="true" value="#{loginBean.usuario.username}"/>
+                    <p:message for="username" display="tooltip" severity="error"/>
+                    
+                    <p:outputLabel for="password" value="Password:"/>
+                    <p:password id="password" required="true" value="#{loginBean.usuario.password}"/>
+                    <p:message for="password" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:messages id="msgs"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <p:commandButton value="Iniciar" update=":flogin, :flogin:msgs" icon="ui-icon-person"
+                                     actionListener="#{loginBean.logIn(evt)}"
+                                     oncomplete="handleLoginRequest(xhr, status, args)"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <script type="text/javascript">
+            function handleLoginRequest(xhr, status, args) {
+                if (args.validationFailed || !args.loggedIn) {
+                    jQuery('#flogin').effect("shake", {times: 5}, 100);
+                } else {
+                    location.href = args.ruta;
+                }
+            }
+        </script>
+    </h:body>
+</html>
+

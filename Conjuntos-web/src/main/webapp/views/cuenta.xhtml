@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./menu.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fcu">
+            <p:panel header="Estado Cuenta">
+                <h:panelGrid columns="4" cellpadding="5">
+                    <p:outputLabel value="Saldo:"/>
+                    <p:outputLabel  value="#{cuentaBean.cuenta.saldo}"/>
+                    <p:outputLabel value="Total:"/>
+                    <p:outputLabel  value="#{cuentaBean.cuenta.total}"/>
+                </h:panelGrid>
+                <f:facet name="footer">                   
+                    <p:commandButton value="Nuevo Pago" update=":fcu, :fpago:outP"
+                                     oncomplete="PF('dlgPago').show()"/>
+                </f:facet>
+            </p:panel>
+            <p:accordionPanel>
+                <p:tab title="Filtos" >
+                    <h:panelGrid columns="8" cellpadding="5">
+                        <p:outputLabel value="Mes:"/>
+                        <p:selectOneMenu value="#{cuentaBean.mes}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{cuentaBean.meses}" var="m" itemLabel="#{m}" itemValue="#{m}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Pagos:"/>
+                        <p:selectBooleanCheckbox value="#{cuentaBean.pagos}">
+                            <p:ajax update=":fcu:dtCu" listener="#{cuentaBean.obtenerPagos}" />
+                        </p:selectBooleanCheckbox>
+
+                        <p:outputLabel value="Multas:"/>
+                        <p:selectBooleanCheckbox value="#{cuentaBean.multas}">
+                            <p:ajax update=":fcu:dtCu" listener="#{cuentaBean.obtenerMultas}" />
+                        </p:selectBooleanCheckbox>
+
+                        <p:outputLabel value="Confirmados:"/>
+                        <p:selectBooleanCheckbox value="#{cuentaBean.multas}">
+                            <p:ajax update=":fcu:dtCu" listener="#{cuentaBean.obtenerMultas}" />
+                        </p:selectBooleanCheckbox>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Rango Fechas">
+                    <h:panelGrid columns="5" cellpadding="5">
+                        <p:outputLabel for="fin" value="Fecha Inicio:" />
+                        <p:calendar id="fin" value="#{cuentaBean.fechaIn}" showOn="button" />
+
+                        <p:outputLabel for="fout" value="Fecha Fin:" />
+                        <p:calendar id="fout" value="#{cuentaBean.fechaOut}" showOn="button" />
+
+                        <p:commandButton value="Buscar" update=":fcu:dtCu"/>
+                    </h:panelGrid>
+                </p:tab>
+            </p:accordionPanel>
+            <p:dataTable id="dtCu" var="cu"
+                         paginator="true" rows="5"
+                         paginatorPosition="Bottom"
+                         selectionMode="single"
+                         emptyMessage="No tiene movimientos."
+                         value="#{cuentaBean.pago.pagos}"
+                         selection="#{cuentaBean.pago.selected}"
+                         rowKey="#{cu.index}">
+                <f:facet name="header">
+                    <p:outputLabel value="Movimientos"/>
+                </f:facet>
+                <p:ajax event="rowSelect" listener="#{cuentaBean.pago.onRowSelect}" 
+                        update=":fpago:outP, :fmulta:outM"/>
+                <p:column headerText="Fecha" style="text-align: center">
+                    <p:outputLabel value="#{cu.creationDate}"/>
+                </p:column>
+                <p:column headerText="Tipo" style="text-align: center">
+                    <p:outputLabel value="#{cu.tipo}"/>
+                </p:column>
+                <p:column headerText="Asunto" style="text-align: center">
+                    <p:outputLabel value="#{cu.asunto}"/>
+                </p:column>
+                <p:column headerText="Forma Pago" style="text-align: center">
+                    <p:outputLabel value="#{cu.forma}"/>
+                </p:column>
+                <p:column headerText="Mes" style="text-align: center">
+                    <p:outputLabel value="#{cu.mes}"/>
+                </p:column>
+                <p:column headerText="Valor" style="text-align: center">
+                    <p:outputLabel value="#{cu.valor}"/>
+                </p:column>
+                <p:column headerText="Estado" style="text-align: center">
+                    <p:outputLabel value="#{cu.estado}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <h:form id="fpago">
+            <p:dialog widgetVar="dlgPago" header="Nuevo Pago" minHeight="40" modal="true"
+                      showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="outP">
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel value="Asunto:"/>
+                        <p:inputText id="asunto" required="true" value="#{cuentaBean.pago.nuevo.asunto}"/>
+                        <p:message for="asunto" display="tooltip" severity="error"/>
+                        
+                        <p:outputLabel value="Forma Pago:"/>
+                        <p:selectOneMenu id="forma" required="true" value="#{cuentaBean.pago.nuevo.forma}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Efectivo" itemValue="Efectivo"/>
+                            <f:selectItem itemLabel="Transferencia" itemValue="Transferencia"/>
+                            <f:selectItem itemLabel="Cheque" itemValue="Cheque"/>
+                        </p:selectOneMenu>
+                        <p:message for="forma" display="tooltip" severity="error"/>
+                        
+                        <p:outputLabel value="Mes:"/>
+                        <p:selectOneMenu id="mesd" required="true" value="#{cuentaBean.mes}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{cuentaBean.meses}" var="m" itemLabel="#{m}" itemValue="#{m}"/>
+                        </p:selectOneMenu>
+                        <p:message for="mesd" display="tooltip" severity="error"/>
+                        
+                        <p:outputLabel value="Valor:"/>
+                        <p:spinner id="valor" required="true" value="#{cuentaBean.pago.nuevo.valor}" prefix="$" 
+                                   min="0" stepFactor="0.1" />
+                        <p:message for="valor" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <p:messages id="msgs"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" update=":fpago:msgs, :fcu:dtCu"
+                                     disabled="#{cuentaBean.pago.insert}"
+                                     actionListener="#{cuentaBean.pago.add(evt)}"/>
+                    
+                    <p:commandButton value="Actualizar" update=":fpago:msgs, :fcu:dtCu" style="float: right"
+                                     disabled="#{cuentaBean.pago.update}"
+                                     actionListener="#{cuentaBean.pago.edit(evt)}"/>
+                    
+                    <p:commandButton value="Eliminar" update=":fpago:msgs, :fcu:dtCu" style="float: right"
+                                     disabled="#{cuentaBean.pago.delete}"
+                                     actionListener="#{cuentaBean.pago.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fmulta">
+            <p:dialog>
+                <p:outputPanel id="outM">
+                    
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
