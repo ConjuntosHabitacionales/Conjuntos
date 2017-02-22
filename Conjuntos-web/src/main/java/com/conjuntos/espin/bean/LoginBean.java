@@ -8,6 +8,7 @@ package com.conjuntos.espin.bean;
 import com.conjuntos.espin.model.Usuario;
 import com.conjuntos.espin.service.UsuarioService;
 import com.conjuntos.espin.util.FacesUtil;
+import java.io.Serializable;
 import javafx.event.ActionEvent;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -22,7 +23,7 @@ import org.primefaces.context.RequestContext;
  */
 @Named(value = "loginBean")
 @ViewScoped
-public class LoginBean {
+public class LoginBean implements Serializable{
 
     private Usuario usuario;
 
