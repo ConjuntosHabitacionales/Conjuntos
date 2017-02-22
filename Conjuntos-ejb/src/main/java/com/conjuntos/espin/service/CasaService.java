@@ -7,6 +7,7 @@ package com.conjuntos.espin.service;
 
 import com.conjuntos.espin.model.Casa;
 import com.mongo.persistance.MongoPersistence;
+import java.io.Serializable;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -22,7 +23,7 @@ import org.mongodb.morphia.query.UpdateResults;
  */
 @LocalBean
 @Stateless
-public class CasaService {
+public class CasaService implements Serializable{
 
     private final MongoPersistence conn = new MongoPersistence();
     private final Datastore ds = conn.context();
