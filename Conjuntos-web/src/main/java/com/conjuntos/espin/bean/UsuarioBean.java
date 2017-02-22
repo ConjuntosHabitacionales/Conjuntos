@@ -26,20 +26,20 @@ import javax.inject.Inject;
 @Named(value = "usuarioBean")
 @ViewScoped
 public class UsuarioBean implements Serializable {
-    
+
     private Persona persona;
     private Casa casa;
     private String password;
-    
+
     @Inject
     private UsuarioService usuarioService;
     @Inject
     private PersonaService personaService;
     @Inject
     private CasaService casaService;
-    
+
     @PostConstruct
-    public void init() {        
+    public void init() {
         this.persona = this.personaService.findByCodPersona(new Persona(
                 SessionUtil.sessionVarNumeric("codPersona")));
         if (this.persona.getId() == null) {
@@ -50,7 +50,7 @@ public class UsuarioBean implements Serializable {
             this.casa = new Casa();
         }
     }
-    
+
     public void editPersonaUsuario(ActionEvent evt) {
         if (this.password.equals(this.persona.getUsuario().getPassword())) {
             Boolean exitoU = this.usuarioService.update(this.persona.getUsuario());
@@ -64,48 +64,57 @@ public class UsuarioBean implements Serializable {
             FacesUtil.addMessageError(null, "El password es incorrecto.");
         }
     }
-    
+
     public void addCasa(ActionEvent evt) {
-        String casaId = this.casaService.insert(casa);
-        if (casaId != null && !casaId.equals("")) {
-            this.persona.setCasa(this.casa);
+        Casa registrada = this.casaService.findByNumero(this.casa);
+        if (registrada.getCodCasa() != null) {
+            this.persona.setCasa(registrada);
             String personaId = this.personaService.insert(this.persona);
             if (personaId != null && !personaId.equals("")) {
                 FacesUtil.addMessageInfo("Infomacion completa.");
             }
+        } else {
+            String casaId = this.casaService.insert(casa);
+            if (casaId != null && !casaId.equals("")) {
+                this.persona.setCasa(this.casa);
+                String personaId = this.personaService.insert(this.persona);
+                if (personaId != null && !personaId.equals("")) {
+                    FacesUtil.addMessageInfo("Infomacion completa.");
+                }
+            }
         }
     }
-    
+
     public void bloquearArrendatario() {
         this.getPersona().setArrendatario(Boolean.FALSE);
     }
-    
+
     public void bloquearPropietario() {
         this.getPersona().setPropietario(Boolean.FALSE);
     }
-    
+
     public Persona getPersona() {
         return persona;
     }
-    
+
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
-    
+
     public Casa getCasa() {
         return casa;
     }
-    
+
     public void setCasa(Casa casa) {
         this.casa = casa;
     }
-    
+
     public String getPassword() {
         return password;
     }
-    
+
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
 }

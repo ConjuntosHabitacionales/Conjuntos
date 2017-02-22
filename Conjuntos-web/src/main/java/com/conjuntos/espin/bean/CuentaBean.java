@@ -51,9 +51,13 @@ public class CuentaBean implements Serializable {
             this.cuenta = new Cuenta();
         } else {
             this.cuenta = this.persona.getCuenta();
+            this.pago.enviarCuenta(this.cuenta);
         }
         this.meses = new ArrayList<>();
         this.LoadMeses();
+        this.pagos = Boolean.FALSE;
+        this.multas = Boolean.FALSE;
+        this.confirmados = Boolean.FALSE;
     }
 
     private void LoadMeses() {
@@ -74,13 +78,23 @@ public class CuentaBean implements Serializable {
             this.meses.add(strMonths[i]);
         }
     }
-    
-    public void obtenerPagos(ActionEvent evt){
-        
+
+    public void filterByMes() {
+        this.pago.filterByMes(this.mes);
     }
-    
-    public void obtenerMultas(ActionEvent evt){
-        
+
+    public void filterByPago() {
+        this.pago.filterByTipo("PAGO");
+        this.multas = Boolean.FALSE;
+    }
+
+    public void filterByMulta() {
+        this.pago.filterByTipo("MULTA");
+        this.pagos = Boolean.FALSE;
+    }
+
+    public void filterByEstado() {
+        this.pago.filterByEstado(this.confirmados);
     }
 
     public Boolean getConfirmados() {

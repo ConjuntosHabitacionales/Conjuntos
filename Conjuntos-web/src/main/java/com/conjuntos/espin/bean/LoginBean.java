@@ -23,7 +23,7 @@ import org.primefaces.context.RequestContext;
  */
 @Named(value = "loginBean")
 @ViewScoped
-public class LoginBean implements Serializable{
+public class LoginBean implements Serializable {
 
     private Usuario usuario;
 
@@ -42,12 +42,14 @@ public class LoginBean implements Serializable{
         RequestContext context = RequestContext.getCurrentInstance();
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         Boolean LoggedIn = Boolean.FALSE;
-        if (mlogIn != null) {
+        if (mlogIn != null && mlogIn.getId() != null) {
             this.session.sessionStart(mlogIn);
             url = url + "/faces/views/menu.xhtml";
             LoggedIn = Boolean.TRUE;
+            this.init();
         } else {
             FacesUtil.addMessageError(null, "Username y/o password incorrectos.");
+            this.init();
         }
         context.addCallbackParam("loggedIn", LoggedIn);
         context.addCallbackParam("ruta", url);
