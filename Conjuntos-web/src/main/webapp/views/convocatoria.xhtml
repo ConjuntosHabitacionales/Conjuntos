@@ -1,10 +1,37 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./menu.xhtml">
+                template="./menu.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        content
+        <h:form id="fco">
+            <p:panel header="Crear Evento o comvocatoria">
+                <h:panelGrid columns="6" cellpadding="5">
+                    <p:outputLabel for="fecha"/>
+                    <p:calendar id="fecha" value="#{cuentaBean.fechaIn}" showOn="button"
+                                    pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                    <p:message for="fecha" display="tooltip" severity="error"/>
+                    
+                    <p:outputLabel for="lugar"/>
+                    <p:inputText id="lugar"/>
+                    <p:message for="lugar" display="tooltip" severity="error"/>
+                    
+                    <p:outputLabel for="motivo"/>
+                    <p:inputText id="motivo"/>
+                    <p:message for="motivo" display="tooltip" severity="error"/>
+                    
+                    <p:outputLabel for="reki"/>
+                    <p:inputText id="reki"/>
+                    <p:message for="reki" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
     </ui:define>
 
 </ui:composition>

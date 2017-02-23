@@ -97,6 +97,12 @@ public class CuentaBean implements Serializable {
         this.pago.filterByEstado(this.confirmados);
     }
 
+    public void filterBetweenDate(ActionEvent evt) {
+        if (this.fechaIn != null && this.fechaOut != null) {
+            this.pago.filterBetweenDate(fechaIn, fechaOut);
+        }
+    }
+
     public Boolean getConfirmados() {
         return confirmados;
     }

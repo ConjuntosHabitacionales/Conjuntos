@@ -49,12 +49,15 @@
                 <p:tab title="Rango Fechas">
                     <h:panelGrid columns="5" cellpadding="5">
                         <p:outputLabel for="fin" value="Fecha Inicio:" />
-                        <p:calendar id="fin" value="#{cuentaBean.fechaIn}" showOn="button" />
+                        <p:calendar id="fin" value="#{cuentaBean.fechaIn}" showOn="button"
+                                    pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
 
                         <p:outputLabel for="fout" value="Fecha Fin:" />
-                        <p:calendar id="fout" value="#{cuentaBean.fechaOut}" showOn="button" />
+                        <p:calendar id="fout" value="#{cuentaBean.fechaOut}" showOn="button"
+                                    pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
 
-                        <p:commandButton value="Buscar" update=":fcu:dtCu"/>
+                        <p:commandButton value="Buscar" update=":fcu:dtCu"
+                                         actionListener="#{cuentaBean.filterBetweenDate(evt)}"/>
                     </h:panelGrid>
                 </p:tab>
             </p:accordionPanel>
@@ -75,7 +78,9 @@
                         oncomplete="PF('dlgPago').show()"/>
                 
                 <p:column headerText="Fecha" style="text-align: center">
-                    <p:outputLabel value="#{cu.creationDate}"/>
+                    <p:outputLabel value="#{cu.lastChange}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                    </p:outputLabel>
                 </p:column>
                 <p:column headerText="Tipo" style="text-align: center">
                     <p:outputLabel value="#{cu.tipo}"/>

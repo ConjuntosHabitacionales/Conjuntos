@@ -45,9 +45,10 @@ public class UsuarioBean implements Serializable {
         if (this.persona.getId() == null) {
             this.persona = new Persona();
             this.password = "";
+            this.casa = new Casa();
         } else {
             this.password = this.persona.getUsuario().getPassword();
-            this.casa = new Casa();
+            this.casa = this.persona.getCasa();
         }
     }
 
@@ -77,8 +78,8 @@ public class UsuarioBean implements Serializable {
             String casaId = this.casaService.insert(casa);
             if (casaId != null && !casaId.equals("")) {
                 this.persona.setCasa(this.casa);
-                String personaId = this.personaService.insert(this.persona);
-                if (personaId != null && !personaId.equals("")) {
+                Boolean exito = this.personaService.update(this.persona);
+                if (exito) {
                     FacesUtil.addMessageInfo("Infomacion completa.");
                 }
             }

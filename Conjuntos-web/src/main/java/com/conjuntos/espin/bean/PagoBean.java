@@ -12,6 +12,7 @@ import com.conjuntos.espin.util.FacesUtil;
 import com.conjuntos.espin.util.StateBean;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -142,6 +143,14 @@ public class PagoBean extends StateBean implements Serializable {
         this.pagos = this.cuenta.getPagos();
     }
      
+      public void filterBetweenDate(Date start , Date finish) {
+        this.cuenta = this.cuentaService.filterBetweenDate(cuenta, start, finish);
+        if(this.cuenta == null){
+            this.cuenta =  new Cuenta();
+            this.pagos = new ArrayList<>();
+        }
+        this.pagos = this.cuenta.getPagos();
+    }
 
     public void onRowSelect(SelectEvent event) {
         this.selected = (Pago) event.getObject();
