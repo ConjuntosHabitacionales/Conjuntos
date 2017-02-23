@@ -10,7 +10,6 @@ import com.conjuntos.espin.model.Pago;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
