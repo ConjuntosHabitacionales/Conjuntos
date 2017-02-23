@@ -42,4 +42,22 @@ public class SessionUtil {
         return code;
     }
     
+    public static Boolean sessionTypeUserProfile() {
+        //false = admin
+        // true = user
+        String code = null;
+        Boolean profile = Boolean.TRUE;
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        Object codeSession = session.getAttribute("tipo");
+        if (codeSession != null) {
+            code = codeSession.toString();
+            if(code.equals("admin")){
+                profile = Boolean.FALSE;
+            }
+            LOG.log(Level.INFO,"Session var :"+codeSession);
+        }
+        return profile;
+    }
+    
 }

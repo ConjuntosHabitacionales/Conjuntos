@@ -8,29 +8,92 @@
 
     <ui:define name="content">
         <h:form id="fco">
-            <p:panel header="Crear Evento o comvocatoria">
+            <p:panel header="Crear evento o comvocatoria" rendered="#{not convocatoriaBean.admin}">
                 <h:panelGrid columns="6" cellpadding="5">
-                    <p:outputLabel for="fecha"/>
-                    <p:calendar id="fecha" value="#{cuentaBean.fechaIn}" showOn="button"
-                                    pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                    <p:outputLabel for="fecha" value="Fecha:"/>
+                    <p:calendar id="fecha" required="true" value="#{convocatoriaBean.nueva.fechaConvocatoria}" showOn="button"
+                                pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                     <p:message for="fecha" display="tooltip" severity="error"/>
-                    
-                    <p:outputLabel for="lugar"/>
-                    <p:inputText id="lugar"/>
+
+                    <p:outputLabel for="lugar" value="Lugar:"/>
+                    <p:inputText id="lugar" required="true" value="#{convocatoriaBean.nueva.lugar}"/>
                     <p:message for="lugar" display="tooltip" severity="error"/>
-                    
-                    <p:outputLabel for="motivo"/>
-                    <p:inputText id="motivo"/>
+
+                    <p:outputLabel for="motivo" value="Motivo:"/>
+                    <p:inputText id="motivo" required="true" value="#{convocatoriaBean.nueva.motivo}"/>
                     <p:message for="motivo" display="tooltip" severity="error"/>
-                    
-                    <p:outputLabel for="reki"/>
-                    <p:inputText id="reki"/>
+
+                    <p:outputLabel for="reki" value="Requisitos:"/>
+                    <p:inputText id="reki" required="true" value="#{convocatoriaBean.nueva.requisitos}"/>
                     <p:message for="reki" display="tooltip" severity="error"/>
                 </h:panelGrid>
                 <f:facet name="footer">
-                    <p:commandButton value="Guardar"/>
+                    <p:messages id="msgs"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <p:commandButton value="Guardar" update=":fco:msgs, :fco:dtco" disabled="#{convocatoriaBean.insert}"/>
                 </f:facet>
             </p:panel>
+            <p:dataTable id="dtco" var="con"
+                         paginator="true" rows="5"
+                         paginatorPosition="Bottom"
+                         selectionMode="single"
+                         emptyMessage="No tiene movimientos."
+                         value="#{convocatoriaBean.convocatorias}"
+                         selection="#{convocatoriaBean.selected}"
+                         rowKey="#{con.codConvocatoria}">
+
+                <p:ajax event="rowSelect" listener="#{convocatoriaBean.onRowSelect}" 
+                        update=":fcoud:outCoud, :fcoud:btnEdit, :fcoud:btnRemove" 
+                        oncomplete="PF('dlgConv').show()" disabled="#{convocatoriaBean.admin}"/>
+                
+                <f:facet name="header">
+                    <p:outputLabel value="Eventos o Convocatorias"/>
+                </f:facet>
+
+                <p:column headerText="Feha"  style="text-align: center">
+                    <p:outputLabel value="#{con.fechaConvocatoria}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                    </p:outputLabel>
+                </p:column>
+                <p:column headerText="Lugar"  style="text-align: center">
+                    <p:outputLabel value="#{con.lugar}"/>
+                </p:column>
+                <p:column headerText="Motivo"  style="text-align: center">
+                    <p:outputLabel value="#{con.motivo}"/>
+                </p:column>
+                <p:column headerText="Requisitos"  style="text-align: center">
+                    <p:outputLabel value="#{con.requisitos}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <h:form id="fcoud">
+            <p:dialog widgetVar="dlgConv" header="Pago" minHeight="40" modal="true"
+                      showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="outCoud">
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel for="fecha"/>
+                        <p:calendar id="fecha" required="true" value="#{convocatoriaBean.nueva.fechaConvocatoria}" showOn="button"
+                                    pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        <p:message for="fecha" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="lugar"/>
+                        <p:inputText id="lugar" required="true" value="#{convocatoriaBean.nueva.lugar}"/>
+                        <p:message for="lugar" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="motivo"/>
+                        <p:inputText id="motivo" required="true" value="#{convocatoriaBean.nueva.motivo}"/>
+                        <p:message for="motivo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="reki"/>
+                        <p:inputText id="reki" required="true" value="#{convocatoriaBean.nueva.requisitos}"/>
+                        <p:message for="reki" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton id="btnEdit" value="Actualizar" disabled="#{convocatoriaBean.update}"/>
+                    
+                    <p:commandButton id="btnRemove" value="Eliminar" style="float: right" disabled="#{convocatoriaBean.delete}"/>
+                </f:facet>   
+            </p:dialog>
         </h:form>
     </ui:define>
 
