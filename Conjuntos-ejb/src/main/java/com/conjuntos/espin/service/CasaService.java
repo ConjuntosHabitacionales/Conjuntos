@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;
@@ -32,9 +33,14 @@ public class CasaService implements Serializable {
         Casa axu = this.findByCodCasa(casa);
         Key<Casa> key = null;
         if (axu.getId() == null) {
+            casa.setCodCasa(new Integer(RandomStringUtils.randomNumeric(5)));
             key = this.ds.save(casa);
         }
-        return key.toString();
+        String keyId = key.toString();
+        if(keyId == null){
+            keyId = axu.getId().toString();
+        }
+        return keyId;
     }
 
     public List<Casa> obtenerLista() {
