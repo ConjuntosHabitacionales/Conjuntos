@@ -74,7 +74,6 @@ public class Convocatoria extends BaseEntity{
         this.requisitos = requisitos;
     }
     
-    
     public List<Persona> getPersonas() {
         return personas;
     }

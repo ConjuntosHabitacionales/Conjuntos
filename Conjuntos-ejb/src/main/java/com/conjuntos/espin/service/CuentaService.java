@@ -10,6 +10,7 @@ import com.conjuntos.espin.model.Pago;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -102,6 +103,23 @@ public class CuentaService implements Serializable {
             List<Pago> filter = new ArrayList<>();
             for (int i = 0; i < find.getPagos().size(); i++) {
                 if (find.getPagos().get(i).getEstado().equals(estado)) {
+                    filter.add(find.getPagos().get(i));
+                }
+            }
+            find.setPagos(filter);
+        }
+        return find;
+    }
+    
+    public Cuenta filterBetweenDate(Cuenta cuenta, Date start, Date finish) {
+        Cuenta find = null;
+        Query<Cuenta> result = this.ds.find(Cuenta.class).
+                field("cedula").equal(cuenta.getCedula());
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList().get(0);
+            List<Pago> filter = new ArrayList<>();
+            for (int i = 0; i < find.getPagos().size(); i++) {
+                if (!((find.getPagos().get(i).getLastChange().before(start)) || (find.getPagos().get(i).getLastChange().after(finish)))) {
                     filter.add(find.getPagos().get(i));
                 }
             }
