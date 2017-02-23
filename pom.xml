@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.conjuntos.espin</groupId>
   <artifactId>Conjuntos</artifactId>
-  <version>2</version>
+  <version>1</version>
   <packaging>pom</packaging>
   <name>Conjuntos</name>
   <modules>
