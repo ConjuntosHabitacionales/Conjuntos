@@ -81,16 +81,13 @@ public class PagoBean extends StateBean implements Serializable {
             this.nuevo.setTipo("PAGO");
             this.pagos.add(this.nuevo);
             this.cuenta.setPagos(this.pagos);
-            String cuentaId = this.cuentaService.insertPago(this.cuenta);
-            if (!cuentaId.equals("") && cuentaId != null) {
-                FacesUtil.addMessageInfo("El pago se ha registrado, Porfavor espera la confimacion de la admisntracion.");
-                this.initData(this.cuenta);
-            } else {
-                FacesUtil.addMessageError(null, "No se ha registrado el pago.");
-            }
-
+            this.cuentaService.insert(this.cuenta);
+            FacesUtil.addMessageInfo("El pago se ha registrado, Porfavor espera la confimacion de la admisntracion.");
+            this.initData(this.cuenta);
+        } else {
+            FacesUtil.addMessageError(null, "No se ha registrado el pago.");
+            this.initData(this.cuenta);
         }
-
     }
 
     public void edit(ActionEvent evt) {
@@ -117,36 +114,36 @@ public class PagoBean extends StateBean implements Serializable {
     }
 
     public void filterByMes(String mes) {
-        this.cuenta = this.cuentaService.filterByPagoMes(this.cuenta,mes);
-        if(this.cuenta == null){
-            this.cuenta =  new Cuenta();
+        this.cuenta = this.cuentaService.filterByPagoMes(this.cuenta, mes);
+        if (this.cuenta == null) {
+            this.cuenta = new Cuenta();
             this.pagos = new ArrayList<>();
         }
         this.pagos = this.cuenta.getPagos();
     }
-    
-     public void filterByTipo(String tipo) {
+
+    public void filterByTipo(String tipo) {
         this.cuenta = this.cuentaService.filterByTipo(this.cuenta, tipo);
-        if(this.cuenta == null){
-            this.cuenta =  new Cuenta();
+        if (this.cuenta == null) {
+            this.cuenta = new Cuenta();
             this.pagos = new ArrayList<>();
         }
         this.pagos = this.cuenta.getPagos();
     }
-     
-     public void filterByEstado(Boolean estado) {
+
+    public void filterByEstado(Boolean estado) {
         this.cuenta = this.cuentaService.filterByEstado(this.cuenta, estado);
-        if(this.cuenta == null){
-            this.cuenta =  new Cuenta();
+        if (this.cuenta == null) {
+            this.cuenta = new Cuenta();
             this.pagos = new ArrayList<>();
         }
         this.pagos = this.cuenta.getPagos();
     }
-     
-      public void filterBetweenDate(Date start , Date finish) {
+
+    public void filterBetweenDate(Date start, Date finish) {
         this.cuenta = this.cuentaService.filterBetweenDate(cuenta, start, finish);
-        if(this.cuenta == null){
-            this.cuenta =  new Cuenta();
+        if (this.cuenta == null) {
+            this.cuenta = new Cuenta();
             this.pagos = new ArrayList<>();
         }
         this.pagos = this.cuenta.getPagos();

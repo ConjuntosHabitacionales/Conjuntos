@@ -72,20 +72,14 @@ public class UsuarioBean implements Serializable {
     public void addCasa(ActionEvent evt) {
         Casa registrada = this.casaService.findByNumero(this.casa);
         if (registrada.getCodCasa() != null) {
-            String casaId = this.casaService.insert(this.casa);
-            if (casaId != null && !casaId.equals("")) {
-                this.persona.setCasa(this.casa);
-                String personaId = this.personaService.insert(this.persona);
-                if (personaId != null && !personaId.equals("")) {
-                    FacesUtil.addMessageInfo("Infomacion completa.");
-                }
-            }
+            this.casaService.insert(this.casa);
+            this.persona.setCasa(this.casa);
+            this.personaService.insert(this.persona);
+            FacesUtil.addMessageInfo("Infomacion completa.");
         } else {
             this.persona.setCasa(registrada);
-            String personaId = this.personaService.insert(this.persona);
-            if (personaId != null && !personaId.equals("")) {
-                FacesUtil.addMessageInfo("Infomacion completa.");
-            }
+            this.personaService.insert(this.persona);
+            FacesUtil.addMessageInfo("Infomacion completa.");
         }
     }
 

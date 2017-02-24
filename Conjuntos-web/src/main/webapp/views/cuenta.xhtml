@@ -65,7 +65,7 @@
                          paginator="true" rows="5"
                          paginatorPosition="Bottom"
                          selectionMode="single"
-                         emptyMessage="No tiene movimientos."
+                         emptyMessage=""
                          value="#{cuentaBean.pago.pagos}"
                          selection="#{cuentaBean.pago.selected}"
                          rowKey="#{cu.index}">
@@ -74,8 +74,7 @@
                 </f:facet>
                 
                 <p:ajax event="rowSelect" listener="#{cuentaBean.pago.onRowSelect}" 
-                        update=":fpago:outP, :fpago:btnIn, :fpago:btnUp, :fpago:btnDe, :fmulta:outM" 
-                        oncomplete="PF('dlgPago').show()"/>
+                        update=":fpago:outP, :fpago:btnIn, :fpago:btnUp, :fpago:btnDe, :fmulta:outM"/>
                 
                 <p:column headerText="Fecha" style="text-align: center">
                     <p:outputLabel value="#{cu.lastChange}">

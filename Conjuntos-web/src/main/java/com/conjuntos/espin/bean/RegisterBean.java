@@ -31,9 +31,9 @@ import org.primefaces.context.RequestContext;
 @ViewScoped
 public class RegisterBean implements Serializable {
 
-    private Usuario usuario;
-    private Persona persona;
-    private String password;
+    private Usuario usuario = new Usuario();
+    private Persona persona = new Persona();
+    private String password = "";
 
     @Inject
     private UsuarioService usuarioService;
@@ -54,28 +54,22 @@ public class RegisterBean implements Serializable {
     public void register(ActionEvent evt) {
         if (this.password.equals(this.usuario.getPassword())) {
             if (this.persona.getPropietario() != this.persona.getArrendatario()) {
-                String usuarioId = this.usuarioService.insert(this.usuario);
-                if (usuarioId != null && !usuarioId.equals("")) {
-                    this.persona.setUsuario(this.usuario);
-                    Cuenta cuenta = new Cuenta();
-                    cuenta.setCedula(this.persona.getCedula());
-                    cuenta.setSaldo(0.0);
-                    cuenta.setTotal(0.0);
-                    cuenta.setPagos(new ArrayList<Pago>());
-                    String keyCuenta = this.cuentaService.insert(cuenta);
-                    String personaId = this.personaService.insert(this.persona);
-                    if (personaId != null && !personaId.equals("")) {
-                        if (keyCuenta != null && !keyCuenta.equals("")) {
-                            this.persona.setCuenta(cuenta);
-                            personaId = this.personaService.insert(this.persona);
-                        }
-                        Persona usersession = this.persona;
-                        this.session.sessionStart(usersession);
-                        this.init();
-                        FacesUtil.addMessageInfo("Se ha registrado con exito.");
-                        RequestContext.getCurrentInstance().execute("PF('dlgLogin').show();");
-                    }
-                }
+                this.usuarioService.insert(this.usuario);
+                this.persona.setUsuario(this.usuario);
+                Cuenta cuenta = new Cuenta();
+                cuenta.setCedula(this.persona.getCedula());
+                cuenta.setSaldo(0.0);
+                cuenta.setTotal(0.0);
+                cuenta.setPagos(new ArrayList<Pago>());
+                this.cuentaService.insert(cuenta);
+                this.persona.setCuenta(cuenta);
+                this.personaService.insert(this.persona);
+                Persona usersession = this.persona;
+                this.session.sessionStart(usersession);
+                this.init();
+                FacesUtil.addMessageInfo("Se ha registrado con exito.");
+                RequestContext.getCurrentInstance().execute("PF('dlgLogin').show();");
+
             } else {
                 FacesUtil.addMessageError(null, "Seleccione Propietario o Individuo.");
             }

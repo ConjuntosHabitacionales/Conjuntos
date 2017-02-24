@@ -25,7 +25,7 @@ import org.primefaces.context.RequestContext;
 @ViewScoped
 public class LoginBean implements Serializable {
 
-    private Usuario usuario;
+    private Usuario usuario = new Usuario();
 
     @Inject
     private UsuarioService usuarioService;

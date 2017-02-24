@@ -29,14 +29,16 @@
                 </h:panelGrid>
                 <f:facet name="footer">
                     <p:messages id="msgs"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
-                    <p:commandButton value="Guardar" update=":fco:msgs, :fco:dtco" disabled="#{convocatoriaBean.insert}"/>
+                    <p:commandButton value="Guardar" disabled="#{convocatoriaBean.insert}"
+                                     update=":fco:msgs, :fco:dtco"
+                                     actionListener="#{convocatoriaBean.add(evt)}"/>
                 </f:facet>
             </p:panel>
             <p:dataTable id="dtco" var="con"
                          paginator="true" rows="5"
                          paginatorPosition="Bottom"
                          selectionMode="single"
-                         emptyMessage="No tiene movimientos."
+                         emptyMessage=""
                          value="#{convocatoriaBean.convocatorias}"
                          selection="#{convocatoriaBean.selected}"
                          rowKey="#{con.codConvocatoria}">
@@ -70,28 +72,34 @@
                       showEffect="fade" hideEffect="fade" resizable="false">
                 <p:outputPanel id="outCoud">
                     <h:panelGrid columns="6" cellpadding="5">
-                        <p:outputLabel for="fecha"/>
+                        <p:outputLabel for="fecha" value="Fecha:"/>
                         <p:calendar id="fecha" required="true" value="#{convocatoriaBean.nueva.fechaConvocatoria}" showOn="button"
                                     pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         <p:message for="fecha" display="tooltip" severity="error"/>
 
-                        <p:outputLabel for="lugar"/>
+                        <p:outputLabel for="lugar" value="Lugar:"/>
                         <p:inputText id="lugar" required="true" value="#{convocatoriaBean.nueva.lugar}"/>
                         <p:message for="lugar" display="tooltip" severity="error"/>
 
-                        <p:outputLabel for="motivo"/>
+                        <p:outputLabel for="motivo" value="Motivo:"/>
                         <p:inputText id="motivo" required="true" value="#{convocatoriaBean.nueva.motivo}"/>
                         <p:message for="motivo" display="tooltip" severity="error"/>
 
-                        <p:outputLabel for="reki"/>
+                        <p:outputLabel for="reki" value="Requisitos:"/>
                         <p:inputText id="reki" required="true" value="#{convocatoriaBean.nueva.requisitos}"/>
                         <p:message for="reki" display="tooltip" severity="error"/>
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton id="btnEdit" value="Actualizar" disabled="#{convocatoriaBean.update}"/>
+                    <p:commandButton id="btnEdit" value="Actualizar"
+                                     update="fcoud, :fco:msgs, :fco:dtco"
+                                     disabled="#{convocatoriaBean.update}"
+                                     actionListener="#{convocatoriaBean.edit(evt)}"/>
                     
-                    <p:commandButton id="btnRemove" value="Eliminar" style="float: right" disabled="#{convocatoriaBean.delete}"/>
+                    <p:commandButton id="btnRemove" value="Eliminar" style="float: right"
+                                     update="fcoud, :fco:msgs, :fco:dtco"
+                                     disabled="#{convocatoriaBean.delete}"
+                                     actionListener="#{convocatoriaBean.remove(evt)}"/>
                 </f:facet>   
             </p:dialog>
         </h:form>
