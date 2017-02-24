@@ -13,7 +13,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
@@ -29,14 +28,14 @@ public class PersonaService implements Serializable {
     private MongoPersistence conn = new MongoPersistence();
     private Datastore ds = conn.context();
 
-    public String insert(Persona persona) {
-        persona.setCodPersona(new Integer(RandomStringUtils.randomNumeric(5)));
+    public void insert(Persona persona) {
         Persona axu = this.findByCodPersona(persona);
-        Key<Persona> key = null;
         if (axu.getId() == null) {
-            key = this.ds.save(persona);
+            persona.setCodPersona(new Integer(RandomStringUtils.randomNumeric(5)));
+            this.ds.save(persona);
+        }else{
+            this.ds.save(persona);
         }
-        return key.toString();
     }
 
     public List<Persona> obtenerLista() {

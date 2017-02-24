@@ -27,6 +27,8 @@ public class Usuario extends BaseEntity{
     private Boolean estado;
 
     public Usuario() {
+        this.username = "";
+        this.password = "";
     }
 
     public Integer getCodUsuario() {

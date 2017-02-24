@@ -14,7 +14,6 @@ import javax.ejb.Stateless;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
@@ -30,17 +29,17 @@ public class UsuarioService implements Serializable {
     private MongoPersistence conn = new MongoPersistence();
     private Datastore ds = conn.context();
 
-    public String insert(Usuario usuario) {
-        usuario.setCodUsuario(new Integer(RandomStringUtils.randomNumeric(5)));
-        usuario.setPassword(DigestUtils.md5Hex(usuario.getPassword()));
-        usuario.setEstado(Boolean.TRUE);
-        usuario.setTipo("user");
+    public void insert(Usuario usuario) {
         Usuario axu = this.findByCodUsuario(usuario);
-        Key<Usuario> key = null;
         if (axu.getId() == null) {
-            key = this.ds.save(usuario);
+            usuario.setCodUsuario(new Integer(RandomStringUtils.randomNumeric(5)));
+            usuario.setPassword(DigestUtils.md5Hex(usuario.getPassword()));
+            usuario.setEstado(Boolean.TRUE);
+            usuario.setTipo("user");
+            this.ds.save(usuario);
+        } else {
+            this.ds.save(usuario);
         }
-        return key.toString();
     }
 
     public List<Usuario> obtenerLista() {

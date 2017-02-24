@@ -27,29 +27,24 @@ import org.mongodb.morphia.query.UpdateResults;
 @LocalBean
 @Stateless
 public class CuentaService implements Serializable {
-    
+
     private MongoPersistence conn = new MongoPersistence();
     private Datastore ds = conn.context();
-    
-    public String insert(Cuenta cuenta) {
+
+    public void insert(Cuenta cuenta) {
         Cuenta axu = this.findByCedula(cuenta);
-        Key<Cuenta> key = null;
         if (axu.getId() == null) {
-            key = this.ds.save(cuenta);
+            this.ds.save(cuenta);
+        }else{
+            this.ds.save(cuenta);
         }
-        return key.toString();
     }
-    
-    public String insertPago(Cuenta cuenta) {
-        Key<Cuenta> key = this.ds.save(cuenta);
-        return key.toString();
-    }
-    
+
     public List<Cuenta> obtenerLista() {
         List<Cuenta> cuentas = this.ds.find(Cuenta.class).asList();
         return cuentas;
     }
-    
+
     public Cuenta findByCedula(Cuenta cuenta) {
         Cuenta find = new Cuenta();
         Query<Cuenta> result = this.ds.find(Cuenta.class).
@@ -59,7 +54,7 @@ public class CuentaService implements Serializable {
         }
         return find;
     }
-    
+
     public Cuenta filterByPagoMes(Cuenta cuenta, String mes) {
         Cuenta find = null;
         Query<Cuenta> result = this.ds.find(Cuenta.class).
@@ -76,7 +71,7 @@ public class CuentaService implements Serializable {
         }
         return find;
     }
-    
+
     public Cuenta filterByTipo(Cuenta cuenta, String tipo) {
         Cuenta find = null;
         Query<Cuenta> result = this.ds.find(Cuenta.class).
@@ -93,7 +88,7 @@ public class CuentaService implements Serializable {
         }
         return find;
     }
-    
+
     public Cuenta filterByEstado(Cuenta cuenta, Boolean estado) {
         Cuenta find = null;
         Query<Cuenta> result = this.ds.find(Cuenta.class).
@@ -110,7 +105,7 @@ public class CuentaService implements Serializable {
         }
         return find;
     }
-    
+
     public Cuenta filterBetweenDate(Cuenta cuenta, Date start, Date finish) {
         Cuenta find = null;
         Query<Cuenta> result = this.ds.find(Cuenta.class).
@@ -127,11 +122,11 @@ public class CuentaService implements Serializable {
         }
         return find;
     }
-    
+
     public void delete(Cuenta cuenta) {
         this.ds.delete(cuenta);
     }
-    
+
     public Boolean update(Cuenta cuenta) {
         Query<Cuenta> query = this.ds.createQuery(Cuenta.class);
         query.and(
@@ -144,7 +139,7 @@ public class CuentaService implements Serializable {
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
     }
-    
+
     public Boolean updatePago(Cuenta cuenta, Pago pago) {
         Query<Cuenta> query = this.ds.createQuery(Cuenta.class);
         query.and(
@@ -161,7 +156,7 @@ public class CuentaService implements Serializable {
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
     }
-    
+
     public Boolean deletePagos(Cuenta cuenta) {
         Query<Cuenta> query = this.ds.createQuery(Cuenta.class);
         query.and(

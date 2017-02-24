@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.conjuntos.espin.service;
 
 import com.conjuntos.espin.model.Convocatoria;
@@ -13,7 +8,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
@@ -25,25 +19,25 @@ import org.mongodb.morphia.query.UpdateResults;
 @LocalBean
 @Stateless
 public class ConvocatoriaService implements Serializable {
-    
+
     private MongoPersistence conn = new MongoPersistence();
     private Datastore ds = conn.context();
-    
-    public String insert(Convocatoria convocatoria) {
+
+    public void insert(Convocatoria convocatoria) {
         Convocatoria axu = this.findByCodConvocatoria(convocatoria);
-        convocatoria.setCodConvocatoria(new Integer(RandomStringUtils.randomNumeric(5)));
-        Key<Convocatoria> key = null;
         if (axu.getId() == null) {
-            key = this.ds.save(convocatoria);
+            convocatoria.setCodConvocatoria(new Integer(RandomStringUtils.randomNumeric(5)));
+            this.ds.save(convocatoria);
+        }else{
+            this.ds.save(convocatoria);
         }
-        return key.toString();
     }
-    
+
     public List<Convocatoria> obtenerLista() {
         List<Convocatoria> convocatorias = this.ds.find(Convocatoria.class).asList();
         return convocatorias;
     }
-    
+
     public Convocatoria findByCodConvocatoria(Convocatoria convocatoria) {
         Convocatoria find = new Convocatoria();
         Query<Convocatoria> result = this.ds.find(Convocatoria.class).
@@ -53,11 +47,11 @@ public class ConvocatoriaService implements Serializable {
         }
         return find;
     }
-    
+
     public void delete(Convocatoria convocatoria) {
         this.ds.delete(convocatoria);
     }
-    
+
     public Boolean update(Convocatoria convocatoria) {
         Query<Convocatoria> query = this.ds.createQuery(Convocatoria.class);
         query.and(
@@ -72,5 +66,5 @@ public class ConvocatoriaService implements Serializable {
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
     }
-    
+
 }
