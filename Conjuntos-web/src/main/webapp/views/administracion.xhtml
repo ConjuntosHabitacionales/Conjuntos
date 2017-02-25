@@ -21,7 +21,8 @@
                     <p:outputLabel value="Cuentas"/>
                 </f:facet>
 
-                <p:ajax event="rowSelect" listener="#{adminBean.onRowSelect}"/>
+                <p:ajax event="rowSelect" listener="#{adminBean.onRowSelect}" 
+                        update=":fcup:dtcup, :fcup:outCup"/>
 
                 <p:column headerText="Cedula" style="text-align: center">
                     <p:outputLabel value="#{cu.cedula}"/>
@@ -53,11 +54,134 @@
                     </p:panelGrid>
                 </p:column>
             </p:dataTable>
-            <p:panel header="Pagos y Multas">
-                <h:panelGrid columns="6" cellspacing="5">
-                    
-                </h:panelGrid>
+        </h:form>
+        <h:form id="fcup">
+            <p:panel header="Informacion de la cuenta">
+                <p:outputPanel id="outCup">
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Nombres:"/>
+                        <h:outputText  value="#{adminBean.cuenta.persona.nombres}"/>
+
+                        <p:outputLabel value="Apellidos:"/>
+                        <h:outputText  value="#{adminBean.cuenta.persona.apellidos}"/>
+
+                        <p:outputLabel value="Cedula:"/>
+                        <h:outputText  value="#{adminBean.cuenta.persona.cedula}"/>
+
+                        <p:outputLabel value="Movil:"/>
+                        <h:outputText value="#{adminBean.cuenta.persona.movil}"/>
+
+                        <p:outputLabel value="E-mail:"/>
+                        <h:outputText  value="#{adminBean.cuenta.persona.email}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Multar"/>
+                </f:facet>
             </p:panel>
+            <p:dataTable id="dtcup" var="cup"
+                         paginator="true" rows="5"
+                         paginatorPosition="Bottom"
+                         selectionMode="single"
+                         emptyMessage=""
+                         value="#{adminBean.cuenta.pago.pagos}"
+                         selection="#{adminBean.cuenta.pago.selected}"
+                         rowKey="#{cup.index}">
+                <f:facet name="header">
+                    <p:outputLabel value="Movimientos"/>
+                </f:facet>
+
+                <p:ajax event="rowSelect" listener="#{adminBean.cuenta.pago.onRowSelect}"
+                        update=":fpago:outP, :fpago:btnUp"
+                        oncomplete="PF('dlgPago').show()"/>
+
+                <p:column headerText="Fecha" style="text-align: center">
+                    <p:outputLabel value="#{cup.lastChange}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                    </p:outputLabel>
+                </p:column>
+                <p:column headerText="Tipo" style="text-align: center">
+                    <p:outputLabel value="#{cup.tipo}"/>
+                </p:column>
+                <p:column headerText="Asunto" style="text-align: center">
+                    <p:outputLabel value="#{cup.asunto}"/>
+                </p:column>
+                <p:column headerText="Forma Pago" style="text-align: center">
+                    <p:outputLabel value="#{cup.forma}"/>
+                </p:column>
+                <p:column headerText="Mes" style="text-align: center">
+                    <p:outputLabel value="#{cup.mes}"/>
+                </p:column>
+                <p:column headerText="Valor" style="text-align: center">
+                    <p:outputLabel value="#{cup.valor}"/>
+                </p:column>
+                <p:column headerText="Estado" style="text-align: center">
+                    <p:outputLabel value="#{cup.estado}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <h:form id="fpago">
+            <p:dialog widgetVar="dlgPago" header="Confirmar Pago" minHeight="40" modal="true"
+                      showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="outP">
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Asunto:"/>
+                        <h:outputText value="#{adminBean.cuenta.pago.nuevo.asunto}"/>
+
+                        <p:outputLabel value="Forma Pago:"/>
+                        <h:outputText value="#{adminBean.cuenta.pago.nuevo.forma}"/>
+
+                        <p:outputLabel value="Mes:"/>
+                        <h:outputText value="#{adminBean.cuenta.pago.nuevo.mes}"/>
+
+                        <p:outputLabel value="Valor:"/>
+                        <h:outputText value="#{adminBean.cuenta.pago.nuevo.valor}">
+                            <f:convertNumber minFractionDigits="2" />
+                        </h:outputText>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton id="btnUp" value="Confirmar" 
+                                     update=":fpago, :fpago:btnUp, :fcup:dtcup, :fadmin:dtcu"
+                                     disabled="#{cuentaBean.pago.update}"
+                                     actionListener="#{adminBean.cuenta.pago.confirmPago(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fmulta">
+             <p:dialog widgetVar="dlgMulta" header="Multa" minHeight="40" modal="true"
+                      showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="outM">
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel for="asunto" value="Asunto:"/>
+                        <p:inputText id="asunto" required="true" value="#{cuentaBean.pago.nuevo.asunto}"/>
+                        <p:message for="asunto" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="mesd" value="Mes:"/>
+                        <p:selectOneMenu id="mesd" required="true" value="#{cuentaBean.pago.nuevo.mes}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{cuentaBean.meses}" var="m" itemLabel="#{m}" itemValue="#{m}"/>
+                        </p:selectOneMenu>
+                        <p:message for="mesd" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="valor" value="Valor:"/>
+                        <p:spinner id="valor" required="true" value="#{cuentaBean.pago.nuevo.valor}" prefix="$" 
+                                   min="0" stepFactor="0.1" />
+                        <p:message for="valor" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <p:messages id="msgs"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                <f:facet name="footer">
+                    <p:commandButton id="btnIn" value="Guardar" update=":fmulta:msgs, :fmulta:outP, :fcu:dtCu"
+                                     disabled="#{cuentaBean.pago.insert}"
+                                     actionListener="#{cuentaBean.pago.add(evt)}"/>
+                    
+                    <p:commandButton id="btnCo" value="Confirmar" 
+                                     update=":fmulta, :fmulta:btnUp, :fcup:dtcup, :fadmin:dtcu"
+                                     disabled="#{cuentaBean.pago.update}"
+                                     actionListener="#{cuentaBean.pago.confirmPago(evt)}"/>
+                </f:facet>
+            </p:dialog>
         </h:form>
     </ui:define>
 

@@ -22,34 +22,27 @@ import org.primefaces.event.SelectEvent;
  */
 @Named(value = "adminBean")
 @Dependent
-public class AdminBean implements Serializable{
+public class AdminBean implements Serializable {
 
-    private Persona nuevo;
     private Persona selected;
     private List<Persona> personas;
-    
+
     @Inject
     private PersonaService personaService;
-    
+    @Inject
+    private CuentaBean cuenta;
+
     @PostConstruct
-    public void init(){
-        this.nuevo = new Persona();
+    public void init() {
         this.personas = this.personaService.obtenerLista();
-        if(this.personas == null && this.personas.size() == 0){
+        if (this.personas == null && this.personas.size() == 0) {
             this.personas = new ArrayList<>();
         }
     }
-    
+
     public void onRowSelect(SelectEvent event) {
         this.selected = (Persona) event.getObject();
-    }
-
-    public Persona getNuevo() {
-        return nuevo;
-    }
-
-    public void setNuevo(Persona nuevo) {
-        this.nuevo = nuevo;
+        this.cuenta.enviarPersona(this.selected);
     }
 
     public Persona getSelected() {
@@ -68,12 +61,12 @@ public class AdminBean implements Serializable{
         this.personas = personas;
     }
 
-    public PersonaService getPersonaService() {
-        return personaService;
+    public CuentaBean getCuenta() {
+        return cuenta;
     }
 
-    public void setPersonaService(PersonaService personaService) {
-        this.personaService = personaService;
+    public void setCuenta(CuentaBean cuenta) {
+        this.cuenta = cuenta;
     }
-    
+
 }

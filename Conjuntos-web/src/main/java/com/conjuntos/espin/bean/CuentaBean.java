@@ -6,6 +6,7 @@
 package com.conjuntos.espin.bean;
 
 import com.conjuntos.espin.model.Cuenta;
+import com.conjuntos.espin.model.Pago;
 import com.conjuntos.espin.model.Persona;
 import com.conjuntos.espin.service.PersonaService;
 import com.conjuntos.espin.util.SessionUtil;
@@ -46,6 +47,28 @@ public class CuentaBean implements Serializable {
     public void init() {
         this.persona = this.personaService.findByCodPersona(new Persona(
                 SessionUtil.sessionVarNumeric("codPersona")));
+        if (this.persona.getId() == null) {
+            this.persona = new Persona();
+            this.cuenta = new Cuenta();
+        } else {
+            this.cuenta = this.persona.getCuenta();
+            if (this.cuenta.getPagos() != null) {
+                this.pago.initData(this.cuenta);
+            } else {
+                this.cuenta.setPagos(new ArrayList<Pago>());
+                this.pago.initData(this.cuenta);
+            }
+
+        }
+        this.meses = new ArrayList<>();
+        this.LoadMeses();
+        this.pagos = Boolean.FALSE;
+        this.multas = Boolean.FALSE;
+        this.confirmados = Boolean.FALSE;
+    }
+
+    public void enviarPersona(Persona persona) {
+        this.persona = persona;
         if (this.persona.getId() == null) {
             this.persona = new Persona();
             this.cuenta = new Cuenta();

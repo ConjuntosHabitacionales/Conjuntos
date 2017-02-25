@@ -47,7 +47,7 @@ public class PagoBean extends StateBean implements Serializable {
         this.save();
     }
 
-    private void initData(Cuenta cuenta) {
+    public void initData(Cuenta cuenta) {
         this.save();
         this.nuevo = new Pago();
         this.cuenta = this.cuentaService.findByCedula(cuenta);
@@ -56,18 +56,19 @@ public class PagoBean extends StateBean implements Serializable {
             this.pagos = new ArrayList<>();
         } else {
             this.pagos = this.cuenta.getPagos();
+            if (this.pagos == null) {
+                this.pagos = new ArrayList<>();
+            }
         }
     }
 
     public void enviarCuenta(Cuenta cuenta) {
-        this.pagos = cuenta.getPagos();
+        this.nuevo = new Pago();
+        this.cuenta = this.cuentaService.pagosPorCorbrar(cuenta);
+        this.pagos = this.cuenta.getPagos();
         if (this.pagos == null) {
             this.pagos = new ArrayList<>();
-            this.cuenta = cuenta;
-        } else {
-            this.cuenta = cuenta;
         }
-
     }
 
     public void add(ActionEvent evt) {
@@ -97,6 +98,18 @@ public class PagoBean extends StateBean implements Serializable {
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha modificado el pago");
                 this.initData(this.cuenta);
+            }
+        }
+    }
+
+    public void confirmPago(ActionEvent evt) {
+        if (this.nuevo.getIndex() != null) {
+            this.nuevo.setLastChange(calendario.getTime());
+            this.nuevo.setEstado(Boolean.TRUE);
+            Boolean exito = this.cuentaService.updatePago(this.cuenta, this.nuevo);
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha modificado el pago");
+                this.enviarCuenta(this.cuenta);
             }
         }
     }
