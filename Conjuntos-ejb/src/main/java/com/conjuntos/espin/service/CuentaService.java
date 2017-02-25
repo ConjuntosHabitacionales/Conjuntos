@@ -34,7 +34,7 @@ public class CuentaService implements Serializable {
         Cuenta axu = this.findByCedula(cuenta);
         if (axu.getId() == null) {
             this.ds.save(cuenta);
-        }else{
+        } else {
             this.ds.save(cuenta);
         }
     }
@@ -42,6 +42,27 @@ public class CuentaService implements Serializable {
     public List<Cuenta> obtenerLista() {
         List<Cuenta> cuentas = this.ds.find(Cuenta.class).asList();
         return cuentas;
+    }
+
+    public Cuenta pagosPorCorbrar(Cuenta cuenta) {
+        Cuenta find = null;
+        Query<Cuenta> result = this.ds.find(Cuenta.class).
+                field("cedula").equal(cuenta.getCedula());
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList().get(0);
+            if (find != null && find.getPagos() != null && !find.getPagos().isEmpty()) {
+                List<Pago> filter = new ArrayList<>();
+                for (int i = 0; i < find.getPagos().size(); i++) {
+                    if (find.getPagos().get(i).getEstado().equals(Boolean.FALSE)) {
+                        filter.add(find.getPagos().get(i));
+                    }
+                }
+                find.setPagos(filter);
+            } else {
+                find = cuenta;
+            }
+        }
+        return find;
     }
 
     public Cuenta findByCedula(Cuenta cuenta) {
