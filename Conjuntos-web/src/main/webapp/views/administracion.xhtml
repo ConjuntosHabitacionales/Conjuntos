@@ -1,10 +1,64 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./menu.xhtml">
+                template="./menu.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        content
+        <h:form id="fadmin">
+            <p:dataTable id="dtcu" var="cu"
+                         paginator="true" rows="5"
+                         paginatorPosition="Bottom"
+                         selectionMode="single"
+                         emptyMessage=""
+                         value="#{adminBean.personas}"
+                         selection="#{adminBean.selected}"
+                         rowKey="#{cu.codPersona}">
+
+                <f:facet name="header">
+                    <p:outputLabel value="Cuentas"/>
+                </f:facet>
+
+                <p:ajax event="rowSelect" listener="#{adminBean.onRowSelect}"/>
+
+                <p:column headerText="Cedula" style="text-align: center">
+                    <p:outputLabel value="#{cu.cedula}"/>
+                </p:column>
+
+                <p:column headerText="Persona" style="text-align: center">
+                    <p:outputLabel value="#{cu.nombres} #{cu.apellidos}"/>
+                </p:column>
+
+                <p:column headerText="Casa" style="text-align: center">
+                    <p:panelGrid columns="4">
+                        <p:outputLabel value="Numero:"/>
+                        <p:outputLabel value="#{cu.casa.numero}"/>
+                        <p:outputLabel value="Bloque:"/>
+                        <p:outputLabel value="#{cu.casa.bloque}"/>
+                    </p:panelGrid>
+                </p:column>
+
+                <p:column headerText="Saldo por cobrar" style="text-align: center">
+                    <p:panelGrid columns="4">
+                        <p:outputLabel value="Multas:"/>
+                        <p:outputLabel value="#{cu.cuenta.obtenerSumaMultas(false)}">
+                            <f:convertNumber minFractionDigits="2" />
+                        </p:outputLabel>
+                        <p:outputLabel value="Pagos:"/>
+                        <p:outputLabel value="#{cu.cuenta.obtenerSumaPagos(false)}">
+                            <f:convertNumber minFractionDigits="2" />
+                        </p:outputLabel>
+                    </p:panelGrid>
+                </p:column>
+            </p:dataTable>
+            <p:panel header="Pagos y Multas">
+                <h:panelGrid columns="6" cellspacing="5">
+                    
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
     </ui:define>
 
 </ui:composition>

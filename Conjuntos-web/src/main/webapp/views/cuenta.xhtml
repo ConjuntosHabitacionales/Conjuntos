@@ -10,10 +10,14 @@
         <h:form id="fcu">
             <p:panel header="Estado Cuenta">
                 <h:panelGrid columns="4" cellpadding="5">
-                    <p:outputLabel value="Saldo:"/>
-                    <p:outputLabel  value="#{cuentaBean.cuenta.saldo}"/>
-                    <p:outputLabel value="Total:"/>
-                    <p:outputLabel  value="#{cuentaBean.cuenta.total}"/>
+                    <p:outputLabel value="Total Pagos Confirmados:"/>
+                    <p:outputLabel  value="#{cuentaBean.cuenta.obtenerSumaPagos(true)}">
+                        <f:convertNumber minFractionDigits="2" />
+                    </p:outputLabel>
+                    <p:outputLabel value="Total Multas Confirmadas:"/>
+                    <p:outputLabel  value="#{cuentaBean.cuenta.obtenerSumaMultas(true)}">
+                        <f:convertNumber minFractionDigits="2" />
+                    </p:outputLabel>
                 </h:panelGrid>
                 <f:facet name="footer">                   
                     <p:commandButton value="Nuevo Pago" update=":fcu, :fpago:outP"
@@ -72,10 +76,11 @@
                 <f:facet name="header">
                     <p:outputLabel value="Movimientos"/>
                 </f:facet>
-                
+
                 <p:ajax event="rowSelect" listener="#{cuentaBean.pago.onRowSelect}" 
-                        update=":fpago:outP, :fpago:btnIn, :fpago:btnUp, :fpago:btnDe, :fmulta:outM"/>
-                
+                        update=":fpago:outP, :fpago:btnIn, :fpago:btnUp, :fpago:btnDe, :fmulta:outM"
+                        oncomplete="PF('dlgPago').show()"/>
+
                 <p:column headerText="Fecha" style="text-align: center">
                     <p:outputLabel value="#{cu.lastChange}">
                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
@@ -109,7 +114,7 @@
                         <p:outputLabel for="asunto" value="Asunto:"/>
                         <p:inputText id="asunto" required="true" value="#{cuentaBean.pago.nuevo.asunto}"/>
                         <p:message for="asunto" display="tooltip" severity="error"/>
-                        
+
                         <p:outputLabel for="forma" value="Forma Pago:"/>
                         <p:selectOneMenu id="forma" required="true" value="#{cuentaBean.pago.nuevo.forma}">
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
@@ -118,14 +123,14 @@
                             <f:selectItem itemLabel="Cheque" itemValue="Cheque"/>
                         </p:selectOneMenu>
                         <p:message for="forma" display="tooltip" severity="error"/>
-                        
+
                         <p:outputLabel for="mesd" value="Mes:"/>
                         <p:selectOneMenu id="mesd" required="true" value="#{cuentaBean.pago.nuevo.mes}">
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true" />
                             <f:selectItems value="#{cuentaBean.meses}" var="m" itemLabel="#{m}" itemValue="#{m}"/>
                         </p:selectOneMenu>
                         <p:message for="mesd" display="tooltip" severity="error"/>
-                        
+
                         <p:outputLabel for="valor" value="Valor:"/>
                         <p:spinner id="valor" required="true" value="#{cuentaBean.pago.nuevo.valor}" prefix="$" 
                                    min="0" stepFactor="0.1" />
@@ -142,7 +147,7 @@
                                      update=":fpago:msgs, :fpago:outP, :fpago:btnIn, :fpago:btnUp, :fpago:btnDe, :fcu:dtCu" style="float: right"
                                      disabled="#{cuentaBean.pago.delete}"
                                      actionListener="#{cuentaBean.pago.remove(evt)}"/>
-                    
+
                     <p:commandButton id="btnUp" value="Actualizar" 
                                      update=":fpago:msgs, :fpago:outP, :fpago:btnIn, :fpago:btnUp, :fpago:btnDe, :fcu:dtCu" style="float: right"
                                      disabled="#{cuentaBean.pago.update}"
@@ -153,7 +158,7 @@
         <h:form id="fmulta">
             <p:dialog>
                 <p:outputPanel id="outM">
-                    
+
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton/>
