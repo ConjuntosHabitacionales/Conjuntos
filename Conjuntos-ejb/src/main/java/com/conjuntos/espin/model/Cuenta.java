@@ -18,14 +18,13 @@ import org.mongodb.morphia.annotations.Indexes;
  *
  * @author luis
  */
-@Entity(value="Cuenta", noClassnameStored = true)
-@Indexes({@Index(fields = @Field("cedula"))})
-public class Cuenta extends BaseEntity{
-    
+@Entity(value = "Cuenta", noClassnameStored = true)
+@Indexes({
+    @Index(fields = @Field("cedula"))})
+public class Cuenta extends BaseEntity {
+
     private String cedula;
-    private Double total;
-    private Double saldo;
-    
+
     @Embedded
     private List<Pago> pagos;
 
@@ -40,28 +39,38 @@ public class Cuenta extends BaseEntity{
         this.cedula = cedula;
     }
 
-    public Double getTotal() {
-        return total;
-    }
-
-    public void setTotal(Double total) {
-        this.total = total;
-    }
-
-    public Double getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
-    }
-
     public List<Pago> getPagos() {
         return pagos;
     }
 
     public void setPagos(List<Pago> pagos) {
         this.pagos = pagos;
+    }
+
+    public Double obtenerSumaPagos(Boolean estado) {
+        Double totalPagos = 0.0;
+        if (this.pagos != null && !this.pagos.isEmpty()) {
+            for (int i = 0; i < this.pagos.size(); i++) {
+                if (this.pagos.get(i).getTipo().equals("PAGO")
+                        && this.pagos.get(i).getEstado().equals(estado)) {
+                    totalPagos = totalPagos + this.pagos.get(i).getValor();
+                }
+            }
+        }
+        return totalPagos;
+    }
+
+    public Double obtenerSumaMultas(Boolean estado) {
+        Double totalMultas = 0.0;
+        if (this.pagos != null && !this.pagos.isEmpty()) {
+            for (int i = 0; i < this.pagos.size(); i++) {
+                if (this.pagos.get(i).getTipo().equals("MULTA")
+                        && this.pagos.get(i).getEstado().equals(estado)) {
+                    totalMultas = totalMultas + this.pagos.get(i).getValor();
+                }
+            }
+        }
+        return totalMultas;
     }
 
     @Override
@@ -88,7 +97,7 @@ public class Cuenta extends BaseEntity{
 
     @Override
     public String toString() {
-        return "Cuenta{" + "cedula=" + cedula + ", total=" + total + ", saldo=" + saldo + ", pagos=" + pagos + '}';
+        return "Cuenta{" + "cedula=" + cedula + ", pagos=" + pagos + '}';
     }
-  
+
 }

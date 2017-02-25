@@ -15,7 +15,6 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
@@ -133,9 +132,7 @@ public class CuentaService implements Serializable {
                 query.criteria("cedula").equal(cuenta.getCedula())
         );
         UpdateOperations<Cuenta> update = this.ds.createUpdateOperations(Cuenta.class);
-        update.set("cedula", cuenta.getCedula()).
-                set("total", cuenta.getTotal()).
-                set("saldo", cuenta.getSaldo());
+        update.set("cedula", cuenta.getCedula());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
     }
