@@ -83,8 +83,32 @@ public class PagoBean extends StateBean implements Serializable {
             this.pagos.add(this.nuevo);
             this.cuenta.setPagos(this.pagos);
             this.cuentaService.insert(this.cuenta);
-            FacesUtil.addMessageInfo("El pago se ha registrado, Porfavor espera la confimacion de la admisntracion.");
+            FacesUtil.addMessageInfo("El se ha registrado, Porfavor espera la confimacion de la admisntracion.");
             this.initData(this.cuenta);
+        } else {
+            FacesUtil.addMessageError(null, "No se ha registrado el pago.");
+            this.initData(this.cuenta);
+        }
+    }
+
+    public void addMulta(ActionEvent evt) {
+        this.save();
+        if (this.nuevo != null) {
+            if (this.nuevo.getForma() != null && !this.nuevo.getForma().equals("")) {
+                Integer index = this.pagos.size();
+                this.nuevo.setIndex(index);
+                this.nuevo.setCreationDate(calendario.getTime());
+                this.nuevo.setLastChange(calendario.getTime());
+                this.nuevo.setEstado(Boolean.FALSE);
+                this.nuevo.setTipo("MULTA");
+                this.pagos.add(this.nuevo);
+                this.cuenta.setPagos(this.pagos);
+                this.cuentaService.insert(this.cuenta);
+                FacesUtil.addMessageInfo("El se ha registrado, Porfavor espera la confimacion de la admisntracion.");
+                this.initData(this.cuenta);
+            }else{
+                FacesUtil.addMessageWarn(null, "El usuario aun no a revisado la multa");
+            }
         } else {
             FacesUtil.addMessageError(null, "No se ha registrado el pago.");
             this.initData(this.cuenta);
