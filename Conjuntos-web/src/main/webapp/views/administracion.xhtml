@@ -75,8 +75,10 @@
                         <h:outputText  value="#{adminBean.cuenta.persona.email}"/>
                     </h:panelGrid>
                 </p:outputPanel>
+                <p:messages id="msgs"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
                 <f:facet name="footer">
-                    <p:commandButton value="Multar"/>
+                    <p:commandButton value="Multar" update=":fmulta:outM, :fmulta:btnIn"
+                                     oncomplete="PF('dlgMulta').show()"/>
                 </f:facet>
             </p:panel>
             <p:dataTable id="dtcup" var="cup"
@@ -121,7 +123,7 @@
             </p:dataTable>
         </h:form>
         <h:form id="fpago">
-            <p:dialog widgetVar="dlgPago" header="Confirmar Pago" minHeight="40" modal="true"
+            <p:dialog widgetVar="dlgPago" header="Confirmar" minHeight="40" modal="true"
                       showEffect="fade" hideEffect="fade" resizable="false">
                 <p:outputPanel id="outP">
                     <h:panelGrid columns="4" cellpadding="5">
@@ -142,7 +144,7 @@
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton id="btnUp" value="Confirmar" 
-                                     update=":fpago, :fpago:btnUp, :fcup:dtcup, :fadmin:dtcu"
+                                     update=":fpago, :fpago:btnUp, :fcup:dtcup, :fcup:msgs :fadmin:dtcu"
                                      disabled="#{cuentaBean.pago.update}"
                                      actionListener="#{adminBean.cuenta.pago.confirmPago(evt)}"/>
                 </f:facet>
@@ -154,32 +156,27 @@
                 <p:outputPanel id="outM">
                     <h:panelGrid columns="6" cellpadding="5">
                         <p:outputLabel for="asunto" value="Asunto:"/>
-                        <p:inputText id="asunto" required="true" value="#{cuentaBean.pago.nuevo.asunto}"/>
+                        <p:inputText id="asunto" required="true" value="#{adminBean.cuenta.pago.nuevo.asunto}"/>
                         <p:message for="asunto" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="mesd" value="Mes:"/>
-                        <p:selectOneMenu id="mesd" required="true" value="#{cuentaBean.pago.nuevo.mes}">
+                        <p:selectOneMenu id="mesd" required="true" value="#{adminBean.cuenta.pago.nuevo.mes}">
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true" />
-                            <f:selectItems value="#{cuentaBean.meses}" var="m" itemLabel="#{m}" itemValue="#{m}"/>
+                            <f:selectItems value="#{adminBean.cuenta.meses}" var="m" itemLabel="#{m}" itemValue="#{m}"/>
                         </p:selectOneMenu>
                         <p:message for="mesd" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="valor" value="Valor:"/>
-                        <p:spinner id="valor" required="true" value="#{cuentaBean.pago.nuevo.valor}" prefix="$" 
+                        <p:spinner id="valor" required="true" value="#{adminBean.cuenta.pago.nuevo.valor}" prefix="$" 
                                    min="0" stepFactor="0.1" />
                         <p:message for="valor" display="tooltip" severity="error"/>
                     </h:panelGrid>
                 </p:outputPanel>
                 <p:messages id="msgs"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
                 <f:facet name="footer">
-                    <p:commandButton id="btnIn" value="Guardar" update=":fmulta:msgs, :fmulta:outP, :fcu:dtCu"
-                                     disabled="#{cuentaBean.pago.insert}"
-                                     actionListener="#{cuentaBean.pago.add(evt)}"/>
-                    
-                    <p:commandButton id="btnCo" value="Confirmar" 
-                                     update=":fmulta, :fmulta:btnUp, :fcup:dtcup, :fadmin:dtcu"
-                                     disabled="#{cuentaBean.pago.update}"
-                                     actionListener="#{cuentaBean.pago.confirmPago(evt)}"/>
+                    <p:commandButton id="btnIn" value="Guardar" update=":fmulta:msgs, :fmulta:outM, :fcup:dtcup"
+                                     disabled="#{adminBean.cuenta.pago.insert}"
+                                     actionListener="#{adminBean.cuenta.pago.addMulta(evt)}"/>
                 </f:facet>
             </p:dialog>
         </h:form>

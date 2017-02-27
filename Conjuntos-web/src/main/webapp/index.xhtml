@@ -19,6 +19,7 @@
                     <p:password id="password" required="true" value="#{loginBean.usuario.password}"/>
                     <p:message for="password" display="tooltip" severity="error"/>
                 </h:panelGrid>
+                <h:commandLink value="Registrarse" action="register"/>
                 <f:facet name="footer">
                     <p:messages id="msgs"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
                     <p:commandButton value="Iniciar" update=":flogin, :flogin:msgs" icon="ui-icon-person"
