@@ -1,9 +1,7 @@
 package com.conjuntos.espin.mail;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -15,7 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import org.apache.commons.lang3.StringEscapeUtils;
 
 @LocalBean
 @Stateless
@@ -62,23 +59,19 @@ public class MailTool implements Serializable {
         try {
             String url = "/var/www/html/mail/mail_cmp.html";
             Path path = Paths.get(url);
-            BufferedWriter bw = null;
-            FileWriter fw = null;
             //if directory exists?
             if (!Files.exists(path)) {
                 Files.createDirectories(path);
-                fw = new FileWriter(url);
-                bw = new BufferedWriter(fw);
-                bw.write(this.getHTML());
-                if (bw != null) {
-                    bw.close();
-                }
-
-                if (fw != null) {
-                    fw.close();
-                }
+                File file = new File(url);
+                FileOutputStream fop = fop = new FileOutputStream(file);
+                String html = this.getHTML();
+                byte[] contentInBytes = html.getBytes();
+                fop.write(contentInBytes);
+                fop.flush();
+                fop.close();
                 log.log(Level.INFO, "Directory is created!");
             }
+            String html = this.getHTML();
             byte[] encoded = Files.readAllBytes(path);
             Charset encoding = Charset.forName("UTF-8");
             message = encoding.decode(ByteBuffer.wrap(encoded)).toString();
