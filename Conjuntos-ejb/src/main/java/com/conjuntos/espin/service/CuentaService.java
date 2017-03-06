@@ -7,6 +7,7 @@ package com.conjuntos.espin.service;
 
 import com.conjuntos.espin.model.Cuenta;
 import com.conjuntos.espin.model.Pago;
+import com.conjuntos.espin.model.Persona;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -61,6 +62,34 @@ public class CuentaService implements Serializable {
             } else {
                 find = cuenta;
             }
+        }
+        return find;
+    }
+
+    public List<Persona> obtenerDeudores() {
+        List<Persona> personas = new ArrayList<>();
+        Persona find = new Persona();
+        List<Cuenta> cuentas = this.obtenerCuentaDeoudores();
+        if (!cuentas.isEmpty()) {
+            for (int i = 0; i < cuentas.size(); i++) {
+                Query<Persona> result = this.ds.find(Persona.class).
+                        field("cedula").equal(cuentas.get(i).getCedula());
+                if (result.asList() != null && !result.asList().isEmpty()) {
+                    find = result.asList().get(0);
+                    find.setCuenta(cuentas.get(i));
+                    personas.add(find);
+                }
+            }
+        }
+        return personas;
+    }
+
+    private List<Cuenta> obtenerCuentaDeoudores() {
+        List<Cuenta> find = new ArrayList<>();
+        Query<Cuenta> result = this.ds.find(Cuenta.class).
+                field("pagos.index").equal("MULTA");
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList();
         }
         return find;
     }

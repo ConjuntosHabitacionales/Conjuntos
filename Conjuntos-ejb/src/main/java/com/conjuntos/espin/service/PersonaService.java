@@ -8,6 +8,7 @@ package com.conjuntos.espin.service;
 import com.conjuntos.espin.model.Persona;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -33,7 +34,7 @@ public class PersonaService implements Serializable {
         if (axu.getId() == null) {
             persona.setCodPersona(new Integer(RandomStringUtils.randomNumeric(5)));
             this.ds.save(persona);
-        }else{
+        } else {
             this.ds.save(persona);
         }
     }
@@ -41,6 +42,16 @@ public class PersonaService implements Serializable {
     public List<Persona> obtenerLista() {
         List<Persona> personas = this.ds.find(Persona.class).asList();
         return personas;
+    }
+
+    public List<Persona> obtenerListaArrendatarios() {
+        List<Persona> find = new ArrayList<>();
+        Query<Persona> result = this.ds.find(Persona.class).
+                field("arrendatario").equal(Boolean.TRUE);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList();
+        }
+        return find;
     }
 
     public Persona findByCodPersona(Persona persona) {
