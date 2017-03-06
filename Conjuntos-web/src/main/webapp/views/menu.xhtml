@@ -16,7 +16,9 @@
     <h:body>
 
         <div id="top">
-
+            <div align="center">
+                <img width="349px" height="126px" src="#{facesContext.externalContext.requestContextPath}/resources/img/hogar.png"/>
+            </div>
         </div>
         <h:form id="menu">
             <p:breadCrumb>
@@ -39,14 +41,20 @@
                 </f:facet>
             </p:breadCrumb>
         </h:form>
-        <div id="content" class="center_content">
-            <ui:insert name="content">
+        <div>
+            <div id="left">
 
-            </ui:insert>
-        </div>
+            </div>
+            <div>
+                <div id="right">
 
-        <div id="bottom">
+                </div>
+                <div id="content" class="right_content">
+                    <ui:insert name="content">
 
+                    </ui:insert>
+                </div>
+            </div>
         </div>
         <script type="text/javascript">
             function handleLoginRequest(xhr, status, args) {

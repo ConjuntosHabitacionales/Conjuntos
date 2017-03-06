@@ -9,53 +9,60 @@
     </h:head>
     <h:body>
         <h:form id="freg">
-            <h:panelGrid columns="3" cellpadding="5">
-                <p:outputLabel for="username" value="Username:"/>
-                <p:inputText id="username" required="true" value="#{registerBean.usuario.username}"/>
-                <p:message for="username" display="tooltip" severity="error"/>
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:panel header="Registrarse" style="width: 500px">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="username" value="Username:"/>
+                        <p:inputText id="username" required="true" value="#{registerBean.usuario.username}"/>
+                        <p:message for="username" display="tooltip" severity="error"/>
 
-                <p:outputLabel for="password" value="Password:"/>
-                <p:password id="password" required="true" value="#{registerBean.usuario.password}"
-                            feedback="true"/>
-                <p:message for="password" display="tooltip" severity="error"/>
+                        <p:outputLabel for="password" value="Password:"/>
+                        <p:password id="password" required="true" value="#{registerBean.usuario.password}"
+                                    feedback="true"/>
+                        <p:message for="password" display="tooltip" severity="error"/>
 
-                <p:outputLabel for="confirm" value="Confirmar Password:"/>
-                <p:password id="confirm" required="true" value="#{registerBean.password}"/>
-                <p:message for="confirm" display="tooltip" severity="error"/>
+                        <p:outputLabel for="confirm" value="Confirmar Password:"/>
+                        <p:password id="confirm" required="true" value="#{registerBean.password}"/>
+                        <p:message for="confirm" display="tooltip" severity="error"/>
 
-                <p:outputLabel for="nombres" value="Nombres:"/>
-                <p:inputText id="nombres" required="true" value="#{registerBean.persona.nombres}"/>
-                <p:message for="nombres" display="tooltip" severity="error"/>
+                        <p:outputLabel for="nombres" value="Nombres:"/>
+                        <p:inputText id="nombres" required="true" value="#{registerBean.persona.nombres}"/>
+                        <p:message for="nombres" display="tooltip" severity="error"/>
 
-                <p:outputLabel for="apellidos" value="Apellidos:"/>
-                <p:inputText id="apellidos" required="true" value="#{registerBean.persona.apellidos}"/>
-                <p:message for="apellidos" display="tooltip" severity="error"/>
+                        <p:outputLabel for="apellidos" value="Apellidos:"/>
+                        <p:inputText id="apellidos" required="true" value="#{registerBean.persona.apellidos}"/>
+                        <p:message for="apellidos" display="tooltip" severity="error"/>
 
-                <p:outputLabel for="cedula" value="Cedula:"/>
-                <p:inputText id="cedula" required="true" value="#{registerBean.persona.cedula}"/>
-                <p:message for="cedula" display="tooltip" severity="error"/>
+                        <p:outputLabel for="cedula" value="Cedula:"/>
+                        <p:inputText id="cedula" required="true" value="#{registerBean.persona.cedula}"/>
+                        <p:message for="cedula" display="tooltip" severity="error"/>
 
-                <p:outputLabel for="movil" value="Movil:"/>
-                <p:inputText id="movil" required="true" value="#{registerBean.persona.movil}"/>
-                <p:message for="movil" display="tooltip" severity="error"/>
+                        <p:outputLabel for="movil" value="Movil:"/>
+                        <p:inputText id="movil" required="true" value="#{registerBean.persona.movil}"/>
+                        <p:message for="movil" display="tooltip" severity="error"/>
 
-                <p:outputLabel for="email" value="E-mail:"/>
-                <p:inputText id="email" required="true" value="#{registerBean.persona.email}"/>
-                <p:message for="email" display="tooltip" severity="error"/>            
+                        <p:outputLabel for="email" value="E-mail:"/>
+                        <p:inputText id="email" required="true" value="#{registerBean.persona.email}"/>
+                        <p:message for="email" display="tooltip" severity="error"/>            
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel for="prop" value="Propietario:"/>
+                        <p:selectBooleanCheckbox id="prop" value="#{registerBean.persona.propietario}">
+                            <p:ajax update=":freg:arre" listener="#{registerBean.bloquearArrendatario}"/>
+                        </p:selectBooleanCheckbox>
+                        <p:outputLabel for="arre" value="Arrendatario:"/>
+                        <p:selectBooleanCheckbox id="arre" value="#{registerBean.persona.arrendatario}">
+                            <p:ajax update=":freg:prop" listener="#{registerBean.bloquearPropietario}"/>
+                        </p:selectBooleanCheckbox>
+                    </h:panelGrid>
+                    <p:messages id="msgs"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <f:facet name="footer">
+                        <p:commandButton value="Registrar" update=":freg, :freg:msgs, flogin:outLogin"
+                                         actionListener="#{registerBean.register(evt)}"/>
+                    </f:facet>
+                </p:panel>
+                <div><img src="#{facesContext.externalContext.requestContextPath}/resources/img/hogar.png"/></div>
             </h:panelGrid>
-            <h:panelGrid columns="4" cellpadding="5">
-                <p:outputLabel for="prop" value="Propietario:"/>
-                <p:selectBooleanCheckbox id="prop" value="#{registerBean.persona.propietario}">
-                    <p:ajax update=":freg:arre" listener="#{registerBean.bloquearArrendatario}"/>
-                </p:selectBooleanCheckbox>
-                <p:outputLabel for="arre" value="Arrendatario:"/>
-                <p:selectBooleanCheckbox id="arre" value="#{registerBean.persona.arrendatario}">
-                    <p:ajax update=":freg:prop" listener="#{registerBean.bloquearPropietario}"/>
-                </p:selectBooleanCheckbox>
-            </h:panelGrid>
-            <p:messages id="msgs"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
-            <p:commandButton value="Registrar" update=":freg, :freg:msgs, flogin:outLogin"
-                             actionListener="#{registerBean.register(evt)}"/>
         </h:form>
         <h:form id="flogin">
             <p:dialog widgetVar="dlgLogin" header="Bienvenido" minHeight="40" modal="true"
