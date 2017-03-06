@@ -5,7 +5,13 @@
  */
 package com.conjuntos.espin.bean;
 
+import com.conjuntos.espin.model.Casa;
+import com.conjuntos.espin.model.Cuenta;
+import com.conjuntos.espin.model.Persona;
 import com.conjuntos.espin.model.Usuario;
+import com.conjuntos.espin.service.CasaService;
+import com.conjuntos.espin.service.CuentaService;
+import com.conjuntos.espin.service.PersonaService;
 import com.conjuntos.espin.service.UsuarioService;
 import com.conjuntos.espin.util.FacesUtil;
 import java.io.Serializable;
@@ -30,11 +36,18 @@ public class LoginBean implements Serializable {
     @Inject
     private UsuarioService usuarioService;
     @Inject
+    private PersonaService personaService;
+    @Inject
+    private CasaService casaService;
+    @Inject
+    private CuentaService cuentaService;
+    @Inject
     private CredencialBean session;
 
     @PostConstruct
     public void init() {
         this.usuario = new Usuario();
+        this.createAdmin();
     }
 
     public void logIn(ActionEvent evt) {
@@ -53,6 +66,31 @@ public class LoginBean implements Serializable {
         }
         context.addCallbackParam("loggedIn", LoggedIn);
         context.addCallbackParam("ruta", url);
+    }
+
+    private void createAdmin() {
+        Usuario admin = new Usuario();
+        admin.setEstado(Boolean.TRUE);
+        admin.setUsername("admin.hogar.2017");
+        admin.setPassword("admin.hogar.2017");
+        Persona pAdmin = new Persona();
+        pAdmin.setApellidos("admin");
+        pAdmin.setNombres("admin");
+        pAdmin.setCedula("000000000");
+        Cuenta cAdmin = new Cuenta();
+        cAdmin.setCedula("000000000");
+        Casa hAdmin = new Casa();
+        hAdmin.setNumero(0);
+        Usuario user = this.usuarioService.findByUsername(admin);
+        if (user.getCodUsuario() == null) {
+            this.usuarioService.insertAdmin(admin);
+            pAdmin.setUsuario(admin);
+            pAdmin.setCuenta(cAdmin);
+            pAdmin.setCasa(hAdmin);
+            this.cuentaService.insert(cAdmin);
+            this.casaService.insert(hAdmin);
+            this.personaService.insert(pAdmin);
+        }
     }
 
     public Usuario getUsuario() {

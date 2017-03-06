@@ -18,40 +18,38 @@
                          rowKey="#{cu.codPersona}">
 
                 <f:facet name="header">
-                    <p:outputLabel value="Cuentas"/>
+                    <h:outputText value="Cuentas"/>
                 </f:facet>
 
                 <p:ajax event="rowSelect" listener="#{adminBean.onRowSelect}" 
                         update=":fcup:dtcup, :fcup:outCup"/>
 
-                <p:column headerText="Cedula" style="text-align: center">
-                    <p:outputLabel value="#{cu.cedula}"/>
+                <p:column headerText="Cedula" style="text-align: center;width: auto">
+                    <h:outputText value="#{cu.cedula}"/>
                 </p:column>
 
-                <p:column headerText="Persona" style="text-align: center">
-                    <p:outputLabel value="#{cu.nombres} #{cu.apellidos}"/>
+                <p:column headerText="Persona" style="text-align: center;width: auto">
+                    <h:outputText value="#{cu.nombres} #{cu.apellidos}"/>
                 </p:column>
 
                 <p:column headerText="Casa" style="text-align: center">
-                    <p:panelGrid columns="4">
-                        <p:outputLabel value="Numero:"/>
-                        <p:outputLabel value="#{cu.casa.numero}"/>
-                        <p:outputLabel value="Bloque:"/>
-                        <p:outputLabel value="#{cu.casa.bloque}"/>
-                    </p:panelGrid>
+                    <h:outputText value="Numero:"/>
+                    <h:outputText value="#{cu.casa.numero}"/>
+                    <p:separator/>
+                    <h:outputText value="Bloque:"/>
+                    <h:outputText value="#{cu.casa.bloque}"/>
                 </p:column>
 
                 <p:column headerText="Saldo por cobrar" style="text-align: center">
-                    <p:panelGrid columns="4">
-                        <p:outputLabel value="Multas:"/>
-                        <p:outputLabel value="#{cu.cuenta.obtenerSumaMultas(false)}">
-                            <f:convertNumber minFractionDigits="2" />
-                        </p:outputLabel>
-                        <p:outputLabel value="Pagos:"/>
-                        <p:outputLabel value="#{cu.cuenta.obtenerSumaPagos(false)}">
-                            <f:convertNumber minFractionDigits="2" />
-                        </p:outputLabel>
-                    </p:panelGrid>
+                    <h:outputText value="Multas:"/>
+                    <h:outputText value="#{cu.cuenta.obtenerSumaMultas(false)}">
+                        <f:convertNumber minFractionDigits="2" />
+                    </h:outputText>
+                    <p:separator/>
+                    <h:outputText value="Pagos:"/>
+                    <h:outputText value="#{cu.cuenta.obtenerSumaPagos(false)}">
+                        <f:convertNumber minFractionDigits="2" />
+                    </h:outputText>
                 </p:column>
             </p:dataTable>
         </h:form>
@@ -59,19 +57,19 @@
             <p:panel header="Informacion de la cuenta">
                 <p:outputPanel id="outCup">
                     <h:panelGrid columns="4" cellpadding="5">
-                        <p:outputLabel value="Nombres:"/>
+                        <h:outputText value="Nombres:"/>
                         <h:outputText  value="#{adminBean.cuenta.persona.nombres}"/>
 
-                        <p:outputLabel value="Apellidos:"/>
+                        <h:outputText value="Apellidos:"/>
                         <h:outputText  value="#{adminBean.cuenta.persona.apellidos}"/>
 
-                        <p:outputLabel value="Cedula:"/>
+                        <h:outputText value="Cedula:"/>
                         <h:outputText  value="#{adminBean.cuenta.persona.cedula}"/>
 
-                        <p:outputLabel value="Movil:"/>
+                        <h:outputText value="Movil:"/>
                         <h:outputText value="#{adminBean.cuenta.persona.movil}"/>
 
-                        <p:outputLabel value="E-mail:"/>
+                        <h:outputText value="E-mail:"/>
                         <h:outputText  value="#{adminBean.cuenta.persona.email}"/>
                     </h:panelGrid>
                 </p:outputPanel>
@@ -90,7 +88,7 @@
                          selection="#{adminBean.cuenta.pago.selected}"
                          rowKey="#{cup.index}">
                 <f:facet name="header">
-                    <p:outputLabel value="Movimientos"/>
+                    <h:outputText value="Movimientos"/>
                 </f:facet>
 
                 <p:ajax event="rowSelect" listener="#{adminBean.cuenta.pago.onRowSelect}"
@@ -98,27 +96,27 @@
                         oncomplete="PF('dlgPago').show()"/>
 
                 <p:column headerText="Fecha" style="text-align: center">
-                    <p:outputLabel value="#{cup.lastChange}">
+                    <h:outputText value="#{cup.lastChange}">
                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
-                    </p:outputLabel>
+                    </h:outputText>
                 </p:column>
                 <p:column headerText="Tipo" style="text-align: center">
-                    <p:outputLabel value="#{cup.tipo}"/>
+                    <h:outputText value="#{cup.tipo}"/>
                 </p:column>
                 <p:column headerText="Asunto" style="text-align: center">
-                    <p:outputLabel value="#{cup.asunto}"/>
+                    <h:outputText value="#{cup.asunto}"/>
                 </p:column>
                 <p:column headerText="Forma Pago" style="text-align: center">
-                    <p:outputLabel value="#{cup.forma}"/>
+                    <h:outputText value="#{cup.forma}"/>
                 </p:column>
                 <p:column headerText="Mes" style="text-align: center">
-                    <p:outputLabel value="#{cup.mes}"/>
+                    <h:outputText value="#{cup.mes}"/>
                 </p:column>
                 <p:column headerText="Valor" style="text-align: center">
-                    <p:outputLabel value="#{cup.valor}"/>
+                    <h:outputText value="#{cup.valor}"/>
                 </p:column>
                 <p:column headerText="Estado" style="text-align: center">
-                    <p:outputLabel value="#{cup.estado}"/>
+                    <h:outputText value="#{cup.estado}"/>
                 </p:column>
             </p:dataTable>
         </h:form>
@@ -151,7 +149,7 @@
             </p:dialog>
         </h:form>
         <h:form id="fmulta">
-             <p:dialog widgetVar="dlgMulta" header="Multa" minHeight="40" modal="true"
+            <p:dialog widgetVar="dlgMulta" header="Multa" minHeight="40" modal="true"
                       showEffect="fade" hideEffect="fade" resizable="false">
                 <p:outputPanel id="outM">
                     <h:panelGrid columns="6" cellpadding="5">

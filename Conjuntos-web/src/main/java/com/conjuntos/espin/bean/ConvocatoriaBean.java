@@ -7,6 +7,7 @@ package com.conjuntos.espin.bean;
 
 import com.conjuntos.espin.model.Convocatoria;
 import com.conjuntos.espin.service.ConvocatoriaService;
+import com.conjuntos.espin.service.PersonaService;
 import com.conjuntos.espin.util.FacesUtil;
 import com.conjuntos.espin.util.SessionUtil;
 import com.conjuntos.espin.util.StateBean;
@@ -35,6 +36,8 @@ public class ConvocatoriaBean extends StateBean implements Serializable{
     
     @Inject
     private ConvocatoriaService convocatoriaService;
+    @Inject
+    private PersonaService personaService;
     
     @PostConstruct
     public void init(){
@@ -52,12 +55,14 @@ public class ConvocatoriaBean extends StateBean implements Serializable{
     
     public void add(ActionEvent evt){
         this.convocatoriaService.insert(this.nueva);
+        this.personaService.sendConvocatoria(this.nueva);
         this.init();
         FacesUtil.addMessageInfo("Se ha enviado la convocatoria evento.");
     }
     
     public void edit(ActionEvent evt){
         this.convocatoriaService.update(this.nueva);
+        this.personaService.sendConvocatoria(this.nueva);
         this.init();
         FacesUtil.addMessageInfo("Se ha actualizado la convocatoria evento.");
     }

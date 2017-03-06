@@ -10,61 +10,159 @@
         <h:form id="rpt">
             <p:accordionPanel>
                 <p:tab title="Habitantes">
-                    <h:panelGrid columns="2" cellpadding="10">
-                        <p:dataTable id="habitantes" var="car" value="#{dataExporterView.cars}"
-                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
-                                     paginator="true" rows="10" style="margin-bottom:20px">
+                    <p:dataTable id="habitantes" var="hab" value="#{repostesBean.habitantes}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                 paginator="true" rows="10" style="margin-bottom:20px">
 
-                            <f:facet name="{Exporters}">
-                                <h:commandLink>
-                                    <p:graphicImage name="/demo/images/excel.png" width="24"/>
-                                    <p:dataExporter type="xls" target="habitantes" fileName="cars" />
-                                </h:commandLink>
-
-                                <h:commandLink>
-                                    <p:graphicImage name="/demo/images/pdf.png" width="24"/>
-                                    <p:dataExporter type="pdf" target="habitantes" fileName="cars"/>
-                                </h:commandLink>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Cedula" />
                             </f:facet>
+                            <h:outputText value="#{hab.cedula}" />
+                        </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Id" />
-                                </f:facet>
-                                <h:outputText value="#{car.id}" />
-                            </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nombre"/>
+                            </f:facet>
+                            <h:outputText value="#{hab.nombres} #{hab.apellidos}" />
+                        </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Year"/>
-                                </f:facet>
-                                <h:outputText value="#{car.year}" />
-                            </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Casa" />
+                            </f:facet>
+                            <h:outputText value="#{hab.casa.numero}" />
+                        </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Brand" />
-                                </f:facet>
-                                <h:outputText value="#{car.brand}" />
-                            </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Multas" />
+                            </f:facet>
+                            <h:outputText value="#{hab.cuenta.obtenerSumaMultas(false)}" />
+                        </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Color" />
-                                </f:facet>
-                                <h:outputText value="#{car.color}" />
-                            </p:column>
-                        </p:dataTable>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Pagos" />
+                            </f:facet>
+                            <h:outputText value="#{hab.cuenta.obtenerSumaPagos(false)}" />
+                        </p:column>
+                    </p:dataTable>
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <h:commandLink>
+                            <p:graphicImage value="/demo/excel.png" />
+                            <p:dataExporter type="xls" target="habitantes" fileName="habitantes" pageOnly="true"/>
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage value="/demo/pdf.png" />
+                            <p:dataExporter type="pdf" target="habitantes" fileName="habitantes" pageOnly="true" />
+                        </h:commandLink>
                     </h:panelGrid>
                 </p:tab>
                 <p:tab title="Arrendatarios">
+                    <p:dataTable id="arrendatarios" var="hab" value="#{repostesBean.arrendatarios}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                 paginator="true" rows="10" style="margin-bottom:20px">
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Cedula" />
+                            </f:facet>
+                            <h:outputText value="#{hab.cedula}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nombre"/>
+                            </f:facet>
+                            <h:outputText value="#{hab.nombres} #{hab.apellidos}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Casa" />
+                            </f:facet>
+                            <h:outputText value="#{hab.casa.numero}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Multas" />
+                            </f:facet>
+                            <h:outputText value="#{hab.cuenta.obtenerSumaMultas(false)}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Pagos" />
+                            </f:facet>
+                            <h:outputText value="#{hab.cuenta.obtenerSumaPagos(false)}" />
+                        </p:column>
+                    </p:dataTable>
                     <h:panelGrid columns="2" cellpadding="10">
-                        <h:outputText value="Francis Ford Coppola's legendary..." />
+                        <h:commandLink>
+                            <p:graphicImage value="/demo/excel.png" />
+                            <p:dataExporter type="xls" target="arrendatarios" fileName="arrendatarios" pageOnly="true"/>
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage value="/demo/pdf.png" />
+                            <p:dataExporter type="pdf" target="arrendatarios" fileName="arrendatarios" pageOnly="true" />
+                        </h:commandLink>
                     </h:panelGrid>
                 </p:tab>
                 <p:tab title="Deudores">
+                    <p:dataTable id="deudores" var="hab" value="#{repostesBean.deudores}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                 paginator="true" rows="10" style="margin-bottom:20px">
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Cedula" />
+                            </f:facet>
+                            <h:outputText value="#{hab.cedula}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nombre"/>
+                            </f:facet>
+                            <h:outputText value="#{hab.nombres} #{hab.apellidos}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Casa" />
+                            </f:facet>
+                            <h:outputText value="#{hab.casa.numero}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Multas" />
+                            </f:facet>
+                            <h:outputText value="#{hab.cuenta.obtenerSumaMultas(false)}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Pagos" />
+                            </f:facet>
+                            <h:outputText value="#{hab.cuenta.obtenerSumaPagos(false)}" />
+                        </p:column>
+                    </p:dataTable>
                     <h:panelGrid columns="2" cellpadding="10">
-                        <h:outputText value="After a break of more than 15 years..." />
+                        <h:commandLink>
+                            <p:graphicImage value="/demo/excel.png" />
+                            <p:dataExporter type="xls" target="deudores" fileName="deudores" pageOnly="true"/>
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage value="/demo/pdf.png" />
+                            <p:dataExporter type="pdf" target="deudores" fileName="deudores" pageOnly="true" />
+                        </h:commandLink>
                     </h:panelGrid>
                 </p:tab>
             </p:accordionPanel>

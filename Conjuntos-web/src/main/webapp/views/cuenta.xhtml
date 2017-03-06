@@ -78,7 +78,7 @@
                 </f:facet>
 
                 <p:ajax event="rowSelect" listener="#{cuentaBean.pago.onRowSelect}" 
-                        update=":fpago:outP, :fpago:btnIn, :fpago:btnUp, :fpago:btnDe, :fmulta:outM"
+                        update=":fpago:outP, :fpago:btnIn, :fpago:btnUp, :fpago:btnDe"
                         oncomplete="PF('dlgPago').show()"/>
 
                 <p:column headerText="Fecha" style="text-align: center">
