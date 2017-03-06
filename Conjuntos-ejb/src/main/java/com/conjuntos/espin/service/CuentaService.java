@@ -87,7 +87,7 @@ public class CuentaService implements Serializable {
     private List<Cuenta> obtenerCuentaDeoudores() {
         List<Cuenta> find = new ArrayList<>();
         Query<Cuenta> result = this.ds.find(Cuenta.class).
-                field("pagos.index").equal("MULTA");
+                field("pagos.estado").equal(Boolean.FALSE);
         if (result.asList() != null && !result.asList().isEmpty()) {
             find = result.asList();
         }

@@ -33,15 +33,15 @@ public class MailTool implements Serializable{
         userName = _userName;
     }
 
-    public Boolean sendEmail(String receiver, String fileName, String estIdBanner, String estNombre, String estNota,String estFecha) {
+    public Boolean sendEmail(String receiver, String Nomnbre,String Lugar, String Asunto, String Forma, String Valor,String Fecha) {
         Boolean success = false;
         try {
             SendEmail sendEmail = new SendEmail();
             sendEmail.setDestinatario(receiver);
-            sendEmail.setSubject("Notificación de Confirmación Nota Examen de Recuperación");
+            sendEmail.setSubject("Notificación TU HOGAR");
             sendEmail.setSubject("Correo de Confirmación");
-            init("UTIC - ESPE", "ningun link");
-            sendEmail.setMensaje(getMessageComprobante(fileName, estIdBanner, estNombre, estNota, estFecha));
+            init("TU HOGAR", "ningun link");
+            sendEmail.setMensaje(getMessageComprobante(Nomnbre, Asunto, Lugar, Forma, Valor, Fecha));
             sendEmail.cargarConfiguracion();
             success = sendEmail.enviarCorreo();
         } catch (Exception ex) {
@@ -52,7 +52,7 @@ public class MailTool implements Serializable{
         return success;
     }
 
-    private String getMessageComprobante(String fileName, String estIdBanner, String estNombre, String estNota,String estFecha) throws Exception {
+    private String getMessageComprobante(String Nomnbre, String Asunto,String Lugar, String Forma, String Valor,String Fecha) throws Exception {
         String message = "";
         try {
             byte[] encoded = Files.readAllBytes(new File(MailTool.class.getResource(
@@ -60,11 +60,12 @@ public class MailTool implements Serializable{
                     .toURI()).toPath());
             Charset encoding = Charset.forName("UTF-8");
             message = encoding.decode(ByteBuffer.wrap(encoded)).toString();
-            message = message.replaceAll("XfileNameX", fileName);
-            message = message.replaceAll("XestIdBannerX", estIdBanner);
-            message = message.replaceAll("XestNombreX", estNombre);
-            message = message.replaceAll("XestNotaX", estNota);
-            message = message.replaceAll("XestFechaX", estFecha);
+            message = message.replaceAll("XNombreX", Nomnbre);
+            message = message.replaceAll("XLugarX", Lugar);
+            message = message.replaceAll("XAsuntoX", Asunto);
+            message = message.replaceAll("XFormaX", Forma);
+            message = message.replaceAll("XValorX", Valor);
+            message = message.replaceAll("XFechaX", Fecha);
 
         } catch (IOException ex) {
             log.log(Level.SEVERE,"No se pudo leer el archivo. IO Exception: ", ex);

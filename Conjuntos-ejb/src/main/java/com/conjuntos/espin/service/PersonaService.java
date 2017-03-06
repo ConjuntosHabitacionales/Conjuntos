@@ -5,9 +5,12 @@
  */
 package com.conjuntos.espin.service;
 
+import com.conjuntos.espin.mail.MailTool;
+import com.conjuntos.espin.model.Convocatoria;
 import com.conjuntos.espin.model.Persona;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.LocalBean;
@@ -36,6 +39,22 @@ public class PersonaService implements Serializable {
             this.ds.save(persona);
         } else {
             this.ds.save(persona);
+        }
+    }
+
+    public void sendConvocatoria(Convocatoria evento) {
+        List<Persona> personas = this.obtenerLista();
+        if (personas != null && !personas.isEmpty()) {
+            for (int i = 0; i < personas.size(); i++) {
+                SimpleDateFormat dateformat = new SimpleDateFormat();
+                if (personas.get(i).getEmail() != null) {
+                    MailTool mails = new MailTool();
+                    mails.sendEmail(personas.get(i).getEmail(),
+                            personas.get(i).getNombres() + " " + personas.get(i).getApellidos(),
+                            evento.getLugar(), evento.getMotivo(), "", "",
+                            dateformat.format(evento.getFechaConvocatoria()));
+                }
+            }
         }
     }
 

@@ -41,6 +41,19 @@ public class UsuarioService implements Serializable {
             this.ds.save(usuario);
         }
     }
+    
+     public void insertAdmin(Usuario usuario) {
+        Usuario axu = this.findByCodUsuario(usuario);
+        if (axu.getId() == null) {
+            usuario.setCodUsuario(new Integer(RandomStringUtils.randomNumeric(5)));
+            usuario.setPassword(DigestUtils.md5Hex(usuario.getPassword()));
+            usuario.setEstado(Boolean.TRUE);
+            usuario.setTipo("admin");
+            this.ds.save(usuario);
+        } else {
+            this.ds.save(usuario);
+        }
+    }
 
     public List<Usuario> obtenerLista() {
         List<Usuario> usuarios = this.ds.find(Usuario.class).asList();
