@@ -75,7 +75,7 @@ public class SendEmail {
         this.props.put("mail.username", "developersninja@gmail.com");
         this.props.put("mail.password", "Espe.2016");
         this.props.put("mail.accoun", "developersninja@gmail.com");
-        this.props.put("mail.screenname", "Confirmación Examém Recuperación");
+        this.props.put("mail.screenname", "HOGAR");
 
         this.session = Session.getInstance(this.props,
                 new javax.mail.Authenticator() {
@@ -102,22 +102,7 @@ public class SendEmail {
             String htmlText = mensaje;
             html.setContent(htmlText, "text/html; charset=utf-8");
             multipart.addBodyPart(html);
-            /**
-             * Insert Image
-             */
-//            MimeBodyPart img = new MimeBodyPart();
-//            File fds = new File(getClass().getResource("/procuradoria/mail/res/acreditacion.png").toURI());
-//            img.attachFile(fds.getPath());
-//            img.setHeader("Content-ID", "<@acreditacion>");
-//            multipart.addBodyPart(img);
-            /**
-             * add pdf
-             */
-//            MimeBodyPart pdf = new MimeBodyPart();
-//            if (fileName != null && fileName.compareTo("") != 0) {
-//                pdf.attachFile(fileName);
-//                multipart.addBodyPart(pdf);
-//            }
+
             message.setContent(multipart);
             Transport.send(message);
             exito = true;
