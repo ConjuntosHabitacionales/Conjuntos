@@ -59,13 +59,14 @@ public class MailTool implements Serializable {
     private String getMessageComprobante(String Nomnbre, String Asunto, String Lugar, String Forma, String Valor, String Fecha) throws Exception {
         String message = "";
         try {
-            String url = "/var/www/html/mail/mail_cmp.html";
-            Path path = Paths.get(url);
+            String url = "/var/www/html/mail/";
+            String filemail = "mail_cmp.html";
+            Path pathdir = Paths.get(url);
             //if directory exists?
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
+            if (!Files.exists(pathdir)) {
+                Files.createDirectories(pathdir);
                 File file = new File(url);
-                FileOutputStream fop = fop = new FileOutputStream(file);
+                FileOutputStream fop = fop = new FileOutputStream(file+filemail);
                 String html = this.getHTML();
                 byte[] contentInBytes = html.getBytes();
                 fop.write(contentInBytes);
@@ -73,7 +74,7 @@ public class MailTool implements Serializable {
                 fop.close();
                 log.log(Level.INFO, "Directory is created!");
             }
-            String html = this.getHTML();
+            Path path = Paths.get(url+filemail);
             byte[] encoded = Files.readAllBytes(path);
             Charset encoding = Charset.forName("UTF-8");
             message = encoding.decode(ByteBuffer.wrap(encoded)).toString();
