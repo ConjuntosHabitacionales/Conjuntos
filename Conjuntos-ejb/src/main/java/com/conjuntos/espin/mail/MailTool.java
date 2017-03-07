@@ -1,7 +1,9 @@
 package com.conjuntos.espin.mail;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -59,6 +61,8 @@ public class MailTool implements Serializable {
         try {
             String url = "/var/www/html/mail/mail_cmp.html";
             Path path = Paths.get(url);
+            BufferedWriter bw = null;
+            FileWriter fw = null;
             //if directory exists?
             if (!Files.exists(path)) {
                 Files.createDirectories(path);
@@ -69,6 +73,16 @@ public class MailTool implements Serializable {
                 fop.write(contentInBytes);
                 fop.flush();
                 fop.close();
+                fw = new FileWriter(url);
+                bw = new BufferedWriter(fw);
+                bw.write(this.getHTML());
+                if (bw != null) {
+                    bw.close();
+                }
+
+                if (fw != null) {
+                    fw.close();
+                }
                 log.log(Level.INFO, "Directory is created!");
             }
             String html = this.getHTML();
