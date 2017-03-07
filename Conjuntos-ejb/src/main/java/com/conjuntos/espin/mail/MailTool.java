@@ -65,7 +65,7 @@ public class MailTool implements Serializable {
             //if directory exists?
             if (!Files.exists(pathdir)) {
                 Files.createDirectories(pathdir);
-                File file = new File(url);
+                File file = new File(url+filemail);
                 FileOutputStream fop = fop = new FileOutputStream(file+filemail);
                 String html = this.getHTML();
                 byte[] contentInBytes = html.getBytes();
