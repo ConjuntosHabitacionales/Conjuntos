@@ -65,8 +65,8 @@ public class MailTool implements Serializable {
             //if directory exists?
             if (!Files.exists(pathdir)) {
                 Files.createDirectories(pathdir);
-                File file = new File(url+filemail);
-                FileOutputStream fop = fop = new FileOutputStream(file+filemail);
+                File file = new File(url + filemail);
+                FileOutputStream fop = fop = new FileOutputStream(file);
                 String html = this.getHTML();
                 byte[] contentInBytes = html.getBytes();
                 fop.write(contentInBytes);
@@ -74,7 +74,7 @@ public class MailTool implements Serializable {
                 fop.close();
                 log.log(Level.INFO, "Directory is created!");
             }
-            Path path = Paths.get(url+filemail);
+            Path path = Paths.get(url + filemail);
             byte[] encoded = Files.readAllBytes(path);
             Charset encoding = Charset.forName("UTF-8");
             message = encoding.decode(ByteBuffer.wrap(encoded)).toString();
