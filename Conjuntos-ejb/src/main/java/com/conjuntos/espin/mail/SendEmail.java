@@ -106,10 +106,11 @@ public class SendEmail {
             message.setContent(multipart);
             Transport.send(message);
             exito = true;
+            log.log(Level.INFO, "Se envio el correo electrónico");
         } catch (MessagingException ex) {
-            log.log(Level.SEVERE, "Messaging: " + ex.getMessage());
+            log.log(Level.SEVERE, "No se envio error ENVIO Messaging: " + ex.getMessage());
         } catch (UnsupportedEncodingException ex) {
-            log.log(Level.SEVERE, "Unsupported Encoding Exception: ", ex);
+            log.log(Level.SEVERE, "No se envio error ENCODING Unsupported Encoding Exception: "+ ex.getMessage());
         }
         return exito;
     }

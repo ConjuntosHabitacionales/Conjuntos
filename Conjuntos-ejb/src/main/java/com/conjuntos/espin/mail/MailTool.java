@@ -48,6 +48,7 @@ public class MailTool implements Serializable {
             sendEmail.setMensaje(getMessageComprobante(Nomnbre, Asunto, Lugar, Forma, Valor, Fecha));
             sendEmail.cargarConfiguracion();
             success = sendEmail.enviarCorreo();
+            log.log(Level.INFO, "Se envio el correo electrónico a "+receiver);
         } catch (Exception ex) {
             log.log(Level.SEVERE, "No se envio el correo electrónico.", ex);
             success = false;
